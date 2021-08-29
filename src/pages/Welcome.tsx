@@ -41,6 +41,7 @@ export default (): React.ReactNode => {
           </a>
         </Typography.Text>
         <CodePreview>yarn add @ant-design/pro-table</CodePreview>
+        <CodePreview>yarn syyys</CodePreview>
         <Typography.Text
           strong
           style={{
