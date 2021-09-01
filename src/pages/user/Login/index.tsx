@@ -52,7 +52,7 @@ const Login: React.FC = () => {
     try {
       // 登录
       const msg = await login({ ...values, type });
-      if (msg.status === 'ok') {
+      if (msg.id !== undefined) {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
@@ -62,12 +62,16 @@ const Login: React.FC = () => {
         /** 此方法会跳转到 redirect 参数所在的位置 */
         if (!history) return;
         const { query } = history.location;
-        const { redirect } = query as { redirect: string };
-        history.push(redirect || '/');
-        return;
+        history.push('/welcome');
+      } else {
+        const defaultLoginFailureMessage = intl.formatMessage({
+          id: 'pages.login.failure',
+          defaultMessage: '登录失败，请重试！',
+        });
+        message.error(defaultLoginFailureMessage);
       }
+      return;
       // 如果失败去设置用户错误信息
-      setUserLoginState(msg);
     } catch (error) {
       const defaultLoginFailureMessage = intl.formatMessage({
         id: 'pages.login.failure',
@@ -90,11 +94,12 @@ const Login: React.FC = () => {
           <div className={styles.header}>
             <Link to="/">
               <img alt="logo" className={styles.logo} src="/logo.svg" />
-              <span className={styles.title}>Ant Design</span>
+              <span className={styles.title}>彩虹屁之家</span>
             </Link>
           </div>
           <div className={styles.desc}>
-            {intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
+            我是索隆
+            {/* {intl.formatMessage({ id: 'pages.layouts.userLayout.title' })} */}
           </div>
         </div>
 
@@ -144,7 +149,7 @@ const Login: React.FC = () => {
               <LoginMessage
                 content={intl.formatMessage({
                   id: 'pages.login.accountLogin.errorMessage',
-                  defaultMessage: '账户或密码错误(admin/ant.design)',
+                  defaultMessage: '账户或密码错误(admin)',
                 })}
               />
             )}
@@ -158,7 +163,7 @@ const Login: React.FC = () => {
                   }}
                   placeholder={intl.formatMessage({
                     id: 'pages.login.username.placeholder',
-                    defaultMessage: '用户名: admin or user',
+                    defaultMessage: '用户名',
                   })}
                   rules={[
                     {
@@ -198,7 +203,9 @@ const Login: React.FC = () => {
             )}
 
             {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
-            {type === 'mobile' && (
+            {type === 'mobile'&&
+            <div style={{width:"100%",textAlign:'center',marginBottom: "20px"}}>后续支持，敬请期待</div>}
+            {/* {type === 'mobile' && (
               <>
                 <ProFormText
                   fieldProps={{
@@ -278,8 +285,8 @@ const Login: React.FC = () => {
                   }}
                 />
               </>
-            )}
-            <div
+            )} */}
+            {/* <div
               style={{
                 marginBottom: 24,
               }}
@@ -294,14 +301,14 @@ const Login: React.FC = () => {
               >
                 <FormattedMessage id="pages.login.forgotPassword" defaultMessage="忘记密码" />
               </a>
-            </div>
+            </div> */}
           </ProForm>
-          <Space className={styles.other}>
+          {/* <Space className={styles.other}>
             <FormattedMessage id="pages.login.loginWith" defaultMessage="其他登录方式" />
             <AlipayCircleOutlined className={styles.icon} />
             <TaobaoCircleOutlined className={styles.icon} />
             <WeiboCircleOutlined className={styles.icon} />
-          </Space>
+          </Space> */}
         </div>
       </div>
       <Footer />

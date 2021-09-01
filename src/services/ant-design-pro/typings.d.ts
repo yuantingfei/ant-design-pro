@@ -28,12 +28,26 @@ declare namespace API {
     type?: string;
     currentAuthority?: string;
   };
+  type UserInfo = {
+    description?: string;
+    id?: string;
+    telphtone?: string;
+    username?: string;
+  };
 
   type PageParams = {
     current?: number;
     pageSize?: number;
   };
-
+  type BillListItem = {
+    id?: number;
+    category?: boolean;
+    moneyCount?: string;
+    description?: string;
+    mod_date?: string;
+    add_date?: string;
+    type?: number;
+  };
   type RuleListItem = {
     key?: number;
     disabled?: boolean;

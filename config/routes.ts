@@ -49,6 +49,12 @@
     component: './TableList',
   },
   {
+    name: '账单列表',
+    icon: 'table',
+    path: '/billlist',
+    component: './BillList',
+  },
+  {
     path: '/',
     redirect: '/welcome',
   },
