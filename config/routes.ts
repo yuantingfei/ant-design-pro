@@ -49,7 +49,7 @@
     component: './TableList',
   },
   {
-    name: '账单列表',
+    name: 'list.bill-list',
     icon: 'table',
     path: '/billlist',
     component: './BillList',

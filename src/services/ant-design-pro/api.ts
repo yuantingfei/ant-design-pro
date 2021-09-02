@@ -57,7 +57,6 @@ export async function rule(
     ...(options || {}),
   });
 }
-/** 获取规则列表 GET /api/rule */
 export async function billlist(
   params: {
     // query
@@ -85,6 +84,17 @@ export async function updateRule(options?: { [key: string]: any }) {
   });
 }
 
+/** 新建规则 POST /api/rule */
+export async function addBill(options?: { [key: string]: any }) {
+  return request<API.BillListItem>('/api/v1/addBill/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
 /** 新建规则 POST /api/rule */
 export async function addRule(options?: { [key: string]: any }) {
   return request<API.RuleListItem>('/api/rule', {

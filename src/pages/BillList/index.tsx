@@ -5,22 +5,23 @@ import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { ModalForm, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
+import { ModalForm, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
-import { rule,billlist, addRule, updateRule, removeRule } from '@/services/ant-design-pro/api';
+import { rule,billlist, addRule,addBill, updateRule, removeRule } from '@/services/ant-design-pro/api';
+import { sum } from 'lodash';
 
 /**
  * @en-US Add node
  * @zh-CN 添加节点
  * @param fields
  */
-const handleAdd = async (fields: API.RuleListItem) => {
+const handleAdd = async (fields: API.BillListItem) => {
   const hide = message.loading('正在添加');
   try {
-    await addRule({ ...fields });
+    await addBill({ ...fields });
     hide();
     message.success('Added successfully');
     return true;
@@ -62,7 +63,7 @@ const handleUpdate = async (fields: FormValueType) => {
  *
  * @param selectedRows
  */
-const handleRemove = async (selectedRows: API.RuleListItem[]) => {
+const handleRemove = async (selectedRows: API.BillListItem[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
@@ -94,8 +95,8 @@ const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.BillListItem>();
+  const [selectedRowsState, setSelectedRows] = useState<API.BillListItem[]>([]);
 
   /**
    * @en-US International configuration
@@ -107,7 +108,8 @@ const TableList: React.FC = () => {
     {
       title: '账单ID',
       dataIndex: 'id',
-      tip: 'The rule name is the unique key',
+      key:'id',
+      search:false,
       render: (dom, entity) => {
         return (
           entity.id
@@ -128,11 +130,20 @@ const TableList: React.FC = () => {
       title: '收入/支出',
       dataIndex: 'type',
       render: (dom, entity) => {
-        return entity.type===1?"支出":'收入';
-        
+        return entity.type===1?"收入":'支出';
       },
     },
-   
+    {
+      title: '描述',
+      dataIndex: 'description',
+      valueType: 'textarea',
+    },
+    {
+      title: '最近修改时间',
+      dataIndex: 'mod_date',
+      search:false,
+    },
+    
     {
       title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
       dataIndex: 'option',
@@ -141,17 +152,12 @@ const TableList: React.FC = () => {
         <a
           key="config"
           onClick={() => {
-            handleUpdateModalVisible(true);
-            setCurrentRow(record);
           }}
         >
-          <FormattedMessage id="pages.searchTable.config" defaultMessage="Configuration" />
+          编辑
         </a>,
         <a key="subscribeAlert" href="https://procomponents.ant.design/">
-          <FormattedMessage
-            id="pages.searchTable.subscribeAlert"
-            defaultMessage="Subscribe to alerts"
-          />
+          删除
         </a>,
       ],
     },
@@ -159,13 +165,13 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.RuleListItem, API.PageParams>
+      <ProTable<API.BillListItem, API.PageParams>
         headerTitle={intl.formatMessage({
           id: 'pages.searchTable.title',
           defaultMessage: 'Enquiry form',
         })}
         actionRef={actionRef}
-        rowKey="key"
+        rowKey="id"
         search={{
           labelWidth: 120,
         }}
@@ -196,6 +202,7 @@ const TableList: React.FC = () => {
               <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
               <FormattedMessage id="pages.searchTable.item" defaultMessage="项" />
               &nbsp;&nbsp;
+              合计:{sum(selectedRowsState.map(i=>i.moneyCount))}
               <span>
                 <FormattedMessage
                   id="pages.searchTable.totalServiceCalls"
@@ -229,14 +236,14 @@ const TableList: React.FC = () => {
       )}
       <ModalForm
         title={intl.formatMessage({
-          id: 'pages.searchTable.createForm.newRule',
+          id: 'pages.searchTable.createForm.newBill',
           defaultMessage: 'New rule',
         })}
         width="400px"
         visible={createModalVisible}
         onVisibleChange={handleModalVisible}
         onFinish={async (value) => {
-          const success = await handleAdd(value as API.RuleListItem);
+          const success = await handleAdd(value as API.BillListItem);
           if (success) {
             handleModalVisible(false);
             if (actionRef.current) {
@@ -257,55 +264,54 @@ const TableList: React.FC = () => {
               ),
             },
           ]}
+          placeholder='请输入金额'
           width="md"
-          name="name"
+          name="moneyCount"
         />
-        <ProFormTextArea width="md" name="desc" />
+        <ProFormSelect
+          rules={[
+            {
+              required: true,
+              message: (
+                <FormattedMessage
+                  id="pages.searchTable.ruleName"
+                  defaultMessage="Rule name is required"
+                />
+              ),
+            },
+          ]}
+          options={[
+            {
+              value: "1",
+              label: "收入",
+            },
+            {
+              value: "0",
+              label: "支出",
+            },
+          ]}
+          placeholder='请选择类型'
+          width="md"
+          name="type"
+        />
+        <ProFormText
+          rules={[
+            {
+              required: true,
+              message: (
+                <FormattedMessage
+                  id="pages.searchTable.ruleName"
+                  defaultMessage="Rule name is required"
+                />
+              ),
+            },
+          ]}
+          width="md"
+          placeholder='请输入分类'
+          name="category"
+        />
+        <ProFormTextArea width="md" name="description" />
       </ModalForm>
-      <UpdateForm
-        onSubmit={async (value) => {
-          const success = await handleUpdate(value);
-          if (success) {
-            handleUpdateModalVisible(false);
-            setCurrentRow(undefined);
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-        onCancel={() => {
-          handleUpdateModalVisible(false);
-          if (!showDetail) {
-            setCurrentRow(undefined);
-          }
-        }}
-        updateModalVisible={updateModalVisible}
-        values={currentRow || {}}
-      />
-
-      <Drawer
-        width={600}
-        visible={showDetail}
-        onClose={() => {
-          setCurrentRow(undefined);
-          setShowDetail(false);
-        }}
-        closable={false}
-      >
-        {currentRow?.name && (
-          <ProDescriptions<API.BillListItem>
-            column={2}
-            title={currentRow?.name}
-            request={async () => ({
-              data: currentRow || {},
-            })}
-            params={{
-              id: currentRow?.name,
-            }}
-            columns={columns as ProDescriptionsItemProps<API.BillListItem>[]}
-          />
-        )}
-      </Drawer>
     </PageContainer>
   );
 };
