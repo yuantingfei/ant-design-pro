@@ -96,6 +96,17 @@ export async function addBill(options?: { [key: string]: any }) {
   });
 }
 /** 新建规则 POST /api/rule */
+export async function removeBill(options?: { [key: string]: any }) {
+  return request('/api/v1/deleteBill/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
+/** 新建规则 POST /api/rule */
 export async function addRule(options?: { [key: string]: any }) {
   return request<API.RuleListItem>('/api/rule', {
     method: 'POST',

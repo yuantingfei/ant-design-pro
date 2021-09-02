@@ -10,7 +10,7 @@ import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
-import { rule,billlist, addRule,addBill, updateRule, removeRule } from '@/services/ant-design-pro/api';
+import { rule,billlist, addRule,addBill,removeBill, updateRule, removeRule } from '@/services/ant-design-pro/api';
 import { sum } from 'lodash';
 
 /**
@@ -57,20 +57,15 @@ const handleUpdate = async (fields: FormValueType) => {
   }
 };
 
-/**
- *  Delete node
- * @zh-CN 删除节点
- *
- * @param selectedRows
- */
-const handleRemove = async (selectedRows: API.BillListItem[]) => {
+const handleRemove = async (value: API.BillListItem) => {
   const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
+  if (!value) return true;
   try {
-    await removeRule({
-      key: selectedRows.map((row) => row.key),
+    const success = await removeBill({
+      id: value.id,
     });
     hide();
+    
     message.success('Deleted successfully and will refresh soon');
     return true;
   } catch (error) {
@@ -157,8 +152,14 @@ const TableList: React.FC = () => {
           编辑
         </a>,
         <a key="subscribeAlert" href="https://procomponents.ant.design/">
-          删除
+          查看文档
         </a>,
+        <a key="subscribeAlert" onClick={() => {
+          handleRemove(record)
+          actionRef.current.reload();
+        }} >
+          删除
+        </a>
       ],
     },
   ];
