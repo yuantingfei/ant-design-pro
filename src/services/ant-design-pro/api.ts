@@ -84,9 +84,20 @@ export async function updateRule(options?: { [key: string]: any }) {
   });
 }
 
-/** 新建规则 POST /api/rule */
+/** 新建账单 POST /api/v1/addBill/ */
 export async function addBill(options?: { [key: string]: any }) {
   return request<API.BillListItem>('/api/v1/addBill/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
+/** 编辑账单 POST /api/v1/updateBill/ */
+export async function editBill(options?: { [key: string]: any }) {
+  return request<API.BillListItem>('/api/v1/updateBill/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

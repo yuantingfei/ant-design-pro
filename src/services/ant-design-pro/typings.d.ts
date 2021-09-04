@@ -44,6 +44,7 @@ declare namespace API {
     category?: boolean;
     moneyCount?: string;
     description?: string;
+    usedate?: string;
     mod_date?: string;
     add_date?: string;
     type?: number;

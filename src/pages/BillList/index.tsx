@@ -7,12 +7,11 @@ import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { ModalForm, ProFormInstance, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
-import ProDescriptions from '@ant-design/pro-descriptions';
 import type { FormValueType } from './components/UpdateForm';
-import UpdateForm from './components/UpdateForm';
-import { rule,billlist, addRule,addBill,removeBill, updateRule, removeRule } from '@/services/ant-design-pro/api';
+import { billlist,addBill,removeBill, updateRule } from '@/services/ant-design-pro/api';
 import { sum } from 'lodash';
 import AddBillModel from './AddBillModel';
+import EditBillModel from './EditBillModel';
 
 /**
  * @en-US Add node
@@ -119,6 +118,7 @@ const TableList: React.FC = () => {
       title: '金额',
       dataIndex: 'moneyCount',
       valueType: 'textarea',
+      search:false,
     },
     {
       title: '收入/支出',
@@ -136,21 +136,28 @@ const TableList: React.FC = () => {
       title: '描述',
       dataIndex: 'description',
       valueType: 'textarea',
+      search:false,
     },
     {
       title: '最近修改时间',
       dataIndex: 'mod_date',
       search:false,
     },
+    {
+      title: '使用时间',
+      dataIndex: 'usedate',
+    },
     
     {
-      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
+      title:'操作',
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
         <a
           key="config"
           onClick={() => {
+            setCurrentRow(record);
+            handleUpdateModalVisible(true)
           }}
         >
           编辑
@@ -171,10 +178,7 @@ const TableList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.BillListItem, API.PageParams>
-        headerTitle={intl.formatMessage({
-          id: 'pages.searchTable.title',
-          defaultMessage: 'Enquiry form',
-        })}
+        headerTitle={'账单列表'}
         actionRef={actionRef}
         rowKey="id"
         search={{
@@ -238,6 +242,12 @@ const TableList: React.FC = () => {
           actionRef.current.reload();
         }
       }}></AddBillModel>
+      <EditBillModel editItem={currentRow} visible={updateModalVisible} handleModalVisible={handleUpdateModalVisible} submitok={()=>{
+        handleUpdateModalVisible(false);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
+      }}></EditBillModel>
       
     </PageContainer>
   );

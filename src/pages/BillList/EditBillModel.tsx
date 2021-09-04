@@ -1,42 +1,49 @@
 import { ModalForm, ProFormDatePicker, ProFormInstance, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
-import React, { useRef } from 'react';
+import React, { useRef,useEffect } from 'react';
 import {message} from 'antd';
-import {addBill } from '@/services/ant-design-pro/api';
+import {editBill } from '@/services/ant-design-pro/api';
 interface Props{
     visible: boolean;
+    editItem: API.BillListItem|undefined;
     handleModalVisible: (value: boolean) => void;
     submitok: () => void;
 }
 
-export default function AddBillModel(props:Props) {
-    const addformRef = useRef<ProFormInstance>();
-    const handleAdd = async (fields: API.BillListItem) => {
-      const hide = message.loading('正在添加');
+export default function EditBillModel(props:Props) {
+    const editformRef = useRef<ProFormInstance>();
+    const handleEdit = async (fields: API.BillListItem) => {
+      const hide = message.loading('正在编辑');
       try {
-        await addBill({ ...fields });
-        message.success('添加成功');
+        await editBill({ ...fields,id:props.editItem?.id });
+        message.success('编辑成功');
         return true;
       } catch (error) {
         hide();
-        message.error('添加失败，请核对好数据后再是一次');
+        message.error('编辑失败，请核对好数据后再是一次');
         return false;
       }
     };
+  useEffect(() => {
+    if(editformRef.current){
+      editformRef.current.setFieldsValue({...props.editItem})
+    }
+  }, [props.editItem])
+  console.log(props.editItem)
+  if(!props.editItem){
+    return <></>
+  }
   return (
     <ModalForm
-        title={'新增记账'}
+        title={'编辑账单'}
         width="400px"
-        formRef={addformRef}
+        formRef={editformRef}
         visible={props.visible}
         onVisibleChange={props.handleModalVisible}
-        initialValues={{
-          moneyCount:"",
-          type:'0',
-        }}
+        // initialValues={props.editItem}
         onFinish={async (value) => {
-          const success = await handleAdd(value as API.BillListItem);
+          const success = await handleEdit(value as API.BillListItem);
           if (success) {
-              addformRef.current?.resetFields();
+              editformRef.current?.resetFields();
               props.submitok()
           }
         }}
@@ -71,11 +78,11 @@ export default function AddBillModel(props:Props) {
           label="收入/支出"
           options={[
             {
-              value: "1",
+              value: 1,
               label: "收入",
             },
             {
-              value: "0",
+              value: 0,
               label: "支出",
             },
           ]}
