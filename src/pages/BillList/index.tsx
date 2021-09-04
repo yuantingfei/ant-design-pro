@@ -5,13 +5,14 @@ import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { ModalForm, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
+import { ModalForm, ProFormInstance, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
 import { rule,billlist, addRule,addBill,removeBill, updateRule, removeRule } from '@/services/ant-design-pro/api';
 import { sum } from 'lodash';
+import AddBillModel from './AddBillModel';
 
 /**
  * @en-US Add node
@@ -66,11 +67,11 @@ const handleRemove = async (value: API.BillListItem) => {
     });
     hide();
     
-    message.success('Deleted successfully and will refresh soon');
+    message.success('删除成功');
     return true;
   } catch (error) {
     hide();
-    message.error('Delete failed, please try again');
+    message.error('删除失败');
     return false;
   }
 };
@@ -86,9 +87,7 @@ const TableList: React.FC = () => {
    * @zh-CN 分布更新窗口的弹窗
    * */
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-
   const [showDetail, setShowDetail] = useState<boolean>(false);
-
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.BillListItem>();
   const [selectedRowsState, setSelectedRows] = useState<API.BillListItem[]>([]);
@@ -124,6 +123,11 @@ const TableList: React.FC = () => {
     {
       title: '收入/支出',
       dataIndex: 'type',
+      valueEnum: {
+        '': { text: '全部', status: 'Default' },
+        1: { text: '收入', status: 'Default' },
+        0: { text: '支出', status: 'Processing' },
+      },
       render: (dom, entity) => {
         return entity.type===1?"收入":'支出';
       },
@@ -151,9 +155,9 @@ const TableList: React.FC = () => {
         >
           编辑
         </a>,
-        <a key="subscribeAlert" href="https://procomponents.ant.design/">
-          查看文档
-        </a>,
+        // <a key="subscribeAlert" href="https://procomponents.ant.design/">
+        //   查看文档
+        // </a>,
         <a key="subscribeAlert" onClick={() => {
           handleRemove(record)
           actionRef.current.reload();
@@ -203,116 +207,38 @@ const TableList: React.FC = () => {
               <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
               <FormattedMessage id="pages.searchTable.item" defaultMessage="项" />
               &nbsp;&nbsp;
-              合计:{sum(selectedRowsState.map(i=>i.moneyCount))}
-              <span>
-                <FormattedMessage
-                  id="pages.searchTable.totalServiceCalls"
-                  defaultMessage="Total number of service calls"
-                />{' '}
-                {selectedRowsState.reduce((pre, item) => pre + item.callNo!, 0)}{' '}
-                <FormattedMessage id="pages.searchTable.tenThousand" defaultMessage="万" />
-              </span>
+              合计:{sum(selectedRowsState.map(i => {
+                 if(i.type===0){
+                   return 0-parseFloat(i.moneyCount);
+                 }else{
+                  return i.moneyCount;
+                 }
+                }
+                 ))}
             </div>
           }
         >
           <Button
             onClick={async () => {
-              await handleRemove(selectedRowsState);
+              for (let index = 0; index < selectedRowsState.length; index++) {
+                const element = selectedRowsState[index];
+                await handleRemove(element);
+              }
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}
           >
-            <FormattedMessage
-              id="pages.searchTable.batchDeletion"
-              defaultMessage="Batch deletion"
-            />
-          </Button>
-          <Button type="primary">
-            <FormattedMessage
-              id="pages.searchTable.batchApproval"
-              defaultMessage="Batch approval"
-            />
+            批量删除
           </Button>
         </FooterToolbar>
       )}
-      <ModalForm
-        title={intl.formatMessage({
-          id: 'pages.searchTable.createForm.newBill',
-          defaultMessage: 'New rule',
-        })}
-        width="400px"
-        visible={createModalVisible}
-        onVisibleChange={handleModalVisible}
-        onFinish={async (value) => {
-          const success = await handleAdd(value as API.BillListItem);
-          if (success) {
-            handleModalVisible(false);
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-      >
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.searchTable.ruleName"
-                  defaultMessage="Rule name is required"
-                />
-              ),
-            },
-          ]}
-          placeholder='请输入金额'
-          width="md"
-          name="moneyCount"
-        />
-        <ProFormSelect
-          rules={[
-            {
-              required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.searchTable.ruleName"
-                  defaultMessage="Rule name is required"
-                />
-              ),
-            },
-          ]}
-          options={[
-            {
-              value: "1",
-              label: "收入",
-            },
-            {
-              value: "0",
-              label: "支出",
-            },
-          ]}
-          placeholder='请选择类型'
-          width="md"
-          name="type"
-        />
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.searchTable.ruleName"
-                  defaultMessage="Rule name is required"
-                />
-              ),
-            },
-          ]}
-          width="md"
-          placeholder='请输入分类'
-          name="category"
-        />
-        <ProFormTextArea width="md" name="description" />
-      </ModalForm>
+      <AddBillModel visible={createModalVisible} handleModalVisible={handleModalVisible} submitok={()=>{
+        handleModalVisible(false);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
+      }}></AddBillModel>
+      
     </PageContainer>
   );
 };
