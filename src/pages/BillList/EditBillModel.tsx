@@ -28,7 +28,6 @@ export default function EditBillModel(props:Props) {
       editformRef.current.setFieldsValue({...props.editItem})
     }
   }, [props.editItem])
-  console.log(props.editItem)
   if(!props.editItem){
     return <></>
   }

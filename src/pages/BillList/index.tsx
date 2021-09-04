@@ -146,6 +146,7 @@ const TableList: React.FC = () => {
     {
       title: '使用时间',
       dataIndex: 'usedate',
+      valueType: 'date',
     },
     
     {
