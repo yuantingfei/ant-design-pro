@@ -42,11 +42,17 @@
       },
     ],
   },
+  // {
+  //   name: 'list.table-list',
+  //   icon: 'table',
+  //   path: '/list',
+  //   component: './TableList',
+  // },
   {
-    name: 'list.table-list',
+    name: '账单分析',
     icon: 'table',
-    path: '/list',
-    component: './TableList',
+    path: '/billAnalysis',
+    component: './BillAnalysis/BillAnalysis',
   },
   {
     name: 'list.bill-list',

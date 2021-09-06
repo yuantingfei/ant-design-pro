@@ -147,6 +147,15 @@ const TableList: React.FC = () => {
           >
             <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
           </Button>,
+          <Button
+          type="primary"
+          key="primary"
+          onClick={() => {
+            handleModalVisible(true);
+          }}
+        >
+          <PlusOutlined />导入
+        </Button>,
         ]}
         request={billlist}
         columns={columns}
