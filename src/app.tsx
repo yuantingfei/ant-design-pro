@@ -6,6 +6,7 @@ import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
+import { message } from 'antd';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -26,6 +27,14 @@ export async function getInitialState(): Promise<{
   const fetchUserInfo = async () => {
     try {
       const msg = await queryCurrentUser();
+      console.log("msg")
+      console.log(msg)
+      if(msg.id===-1){
+        history.replace({
+          pathname: '/user/login'
+        });
+        message.error('请先登录');
+      }
       return msg;
     } catch (error) {
       history.push(loginPath);

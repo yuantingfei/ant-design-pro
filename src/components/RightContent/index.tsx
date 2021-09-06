@@ -1,11 +1,10 @@
-import { Space } from 'antd';
+import { Button, Space,Modal } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import React from 'react';
-import { useModel, SelectLang } from 'umi';
-import Avatar from './AvatarDropdown';
-import HeaderSearch from '../HeaderSearch';
+import { history, useModel } from 'umi';
 import styles from './index.less';
-
+import { logout } from '@/services/ant-design-pro/api';
+const { confirm } = Modal;
 export type SiderTheme = 'light' | 'dark';
 
 const GlobalHeaderRight: React.FC = () => {
@@ -21,41 +20,33 @@ const GlobalHeaderRight: React.FC = () => {
   if ((navTheme === 'dark' && layout === 'top') || layout === 'mix') {
     className = `${styles.right}  ${styles.dark}`;
   }
+  const showConfirm = () => {
+    confirm({
+      title: '退出',
+      content: '你确认要退出么？',
+      onOk() {
+        logout().then(res=>{
+          if(res.status){
+            history.replace({
+              pathname: '/user/login'
+            });
+          }
+        });
+      },
+      onCancel() {
+      },
+    });
+  }
   return (
     <Space className={className}>
-      <HeaderSearch
-        className={`${styles.action} ${styles.search}`}
-        placeholder="站内搜索"
-        defaultValue="umi ui"
-        options={[
-          { label: <a href="https://umijs.org/zh/guide/umi-ui.html">umi ui</a>, value: 'umi ui' },
-          {
-            label: <a href="next.ant.design">Ant Design</a>,
-            value: 'Ant Design',
-          },
-          {
-            label: <a href="https://protable.ant.design/">Pro Table</a>,
-            value: 'Pro Table',
-          },
-          {
-            label: <a href="https://prolayout.ant.design/">Pro Layout</a>,
-            value: 'Pro Layout',
-          },
-        ]}
-        // onSearch={value => {
-        //   console.log('input', value);
-        // }}
-      />
-      <span
-        className={styles.action}
-        onClick={() => {
-          window.open('https://pro.ant.design/docs/getting-started');
-        }}
-      >
-        <QuestionCircleOutlined />
-      </span>
-      <Avatar />
-      <SelectLang className={styles.action} />
+      <Button type="link">
+        个人信息
+      </Button>
+      <Button type="link" onClick={()=>{
+        showConfirm();
+      }}>
+        退出
+      </Button>
     </Space>
   );
 };

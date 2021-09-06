@@ -1,62 +1,14 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer } from 'antd';
+import { Button, message, } from 'antd';
 import React, { useState, useRef } from 'react';
 import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { ModalForm, ProFormInstance, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
-import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
-import type { FormValueType } from './components/UpdateForm';
-import { billlist,addBill,removeBill, updateRule } from '@/services/ant-design-pro/api';
+import { billlist,removeBill } from '@/services/ant-design-pro/api';
 import { sum } from 'lodash';
 import AddBillModel from './AddBillModel';
 import EditBillModel from './EditBillModel';
-
-/**
- * @en-US Add node
- * @zh-CN 添加节点
- * @param fields
- */
-const handleAdd = async (fields: API.BillListItem) => {
-  const hide = message.loading('正在添加');
-  try {
-    await addBill({ ...fields });
-    hide();
-    message.success('Added successfully');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Adding failed, please try again!');
-    return false;
-  }
-};
-
-/**
- * @en-US Update node
- * @zh-CN 更新节点
- *
- * @param fields
- */
-const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('Configuring');
-  try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
-    hide();
-
-    message.success('Configuration is successful');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Configuration failed, please try again!');
-    return false;
-  }
-};
-
 const handleRemove = async (value: API.BillListItem) => {
   const hide = message.loading('正在删除');
   if (!value) return true;
@@ -138,17 +90,17 @@ const TableList: React.FC = () => {
       valueType: 'textarea',
       search:false,
     },
-    {
-      title: '最近修改时间',
-      dataIndex: 'mod_date',
-      search:false,
-    },
+    
     {
       title: '使用时间',
       dataIndex: 'usedate',
       valueType: 'date',
     },
-    
+    {
+      title: '最近修改时间',
+      dataIndex: 'mod_date',
+      search:false,
+    },
     {
       title:'操作',
       dataIndex: 'option',

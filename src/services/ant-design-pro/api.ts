@@ -29,7 +29,16 @@ export async function login(body: API.LoginParams, options?: { [key: string]: an
     ...(options || {}),
   });
 }
-
+/** 退出登录接口 POST /api/login/logout */
+export async function logout() {
+  return request<API.UserInfo>('/api/v1/logout/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: {}
+  });
+}
 /** 此处后端没有提供注释 GET /api/notices */
 export async function getNotices(options?: { [key: string]: any }) {
   return request<API.NoticeIconList>('/api/notices', {
