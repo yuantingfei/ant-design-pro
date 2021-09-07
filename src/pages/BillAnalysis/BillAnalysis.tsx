@@ -1,5 +1,7 @@
 import React from 'react';
 import { Line } from '@ant-design/charts';
+import { PageContainer } from '@ant-design/pro-layout';
+import { Col, Row } from 'antd';
 
 const BillAnalysis: React.FC = () => {
   const data = [
@@ -24,6 +26,26 @@ const BillAnalysis: React.FC = () => {
       shape: 'diamond',
     },
   };
-  return <Line {...config} />;
+  return (
+  <PageContainer>
+      <Row>
+      <Col span={24}><Line {...config} /></Col>
+    </Row>
+    <Row>
+      <Col span={12}>col-12</Col>
+      <Col span={12}>col-12</Col>
+    </Row>
+    <Row>
+      <Col span={8}>col-8</Col>
+      <Col span={8}>col-8</Col>
+      <Col span={8}>col-8</Col>
+    </Row>
+    <Row>
+      <Col span={6}>col-6</Col>
+      <Col span={6}>col-6</Col>
+      <Col span={6}>col-6</Col>
+      <Col span={6}>col-6</Col>
+    </Row>
+    </PageContainer>);
 };
 export default BillAnalysis;

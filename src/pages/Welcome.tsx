@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Card, Alert, Typography } from 'antd';
 import { useIntl, FormattedMessage } from 'umi';
 import styles from './Welcome.less';
+import moment from 'moment';
 
 const CodePreview: React.FC = ({ children }) => (
   <pre className={styles.pre}>
@@ -14,14 +15,19 @@ const CodePreview: React.FC = ({ children }) => (
 
 export default (): React.ReactNode => {
   const intl = useIntl();
+  const [datetime, setdatetime] = useState(moment())
+  //今年第一天
+  const [jinnaindate, setjinnaindate] = useState(moment().startOf('year'))
+  //本月第一天
+  const [benyuedate, setbenyuedate] = useState(moment().startOf('month'))
+  setInterval(()=>{
+    setdatetime(moment())
+  },1000)
   return (
     <PageContainer>
       <Card>
         <Alert
-          message={intl.formatMessage({
-            id: 'pages.welcome.alertMessage',
-            defaultMessage: 'Faster and stronger heavy-duty components have been released.',
-          })}
+          message={`欢迎来到彩虹屁社区之家！现在时间是${ datetime.format("MMMM Do YYYY, h:mm:ss a")}，今天是今年第${datetime.diff(jinnaindate,'days')+1}天，本月的第${datetime.diff(benyuedate,'days')+1}天，${datetime.format('dddd')}`}
           type="success"
           showIcon
           banner
@@ -30,34 +36,16 @@ export default (): React.ReactNode => {
             marginBottom: 24,
           }}
         />
-        <Typography.Text strong>
-          <FormattedMessage id="pages.welcome.advancedComponent" defaultMessage="Advanced Form" />{' '}
-          <a
-            href="https://procomponents.ant.design/components/table"
-            rel="noopener noreferrer"
-            target="__blank"
-          >
-            <FormattedMessage id="pages.welcome.link" defaultMessage="Welcome" />
-          </a>
-        </Typography.Text>
-        <CodePreview>yarn add @ant-design/pro-table</CodePreview>
-        <CodePreview>yarn syyys</CodePreview>
-        <Typography.Text
-          strong
+        <Alert
+          message={'彩虹屁社区之家,是又一群正能量,欢快的朋友们聚集、讨论生活、体验生活、分享生活、方便生活的地方，大家畅所欲言，分享彼此的生活方式，传递正能量'}
+          type="success"
+          showIcon
+          banner
           style={{
-            marginBottom: 12,
+            margin: -12,
+            marginBottom: 24,
           }}
-        >
-          <FormattedMessage id="pages.welcome.advancedLayout" defaultMessage="Advanced layout" />{' '}
-          <a
-            href="https://procomponents.ant.design/components/layout"
-            rel="noopener noreferrer"
-            target="__blank"
-          >
-            <FormattedMessage id="pages.welcome.link" defaultMessage="Welcome" />
-          </a>
-        </Typography.Text>
-        <CodePreview>yarn add @ant-design/pro-layout</CodePreview>
+        />
       </Card>
     </PageContainer>
   );
