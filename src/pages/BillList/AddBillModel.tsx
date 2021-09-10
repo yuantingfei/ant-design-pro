@@ -2,6 +2,8 @@ import { ModalForm, ProFormDatePicker, ProFormInstance, ProFormSelect, ProFormTe
 import React, { useRef } from 'react';
 import {message} from 'antd';
 import {addBill } from '@/services/ant-design-pro/api';
+import { months } from 'moment';
+import moment from 'moment';
 interface Props{
     visible: boolean;
     handleModalVisible: (value: boolean) => void;
@@ -32,6 +34,7 @@ export default function AddBillModel(props:Props) {
         initialValues={{
           moneyCount:"",
           type:'0',
+          usedate:moment()
         }}
         onFinish={async (value) => {
           const success = await handleAdd(value as API.BillListItem);

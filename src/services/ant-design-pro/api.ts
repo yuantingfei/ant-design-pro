@@ -102,3 +102,27 @@ export async function getDataByCategory(
     ...(options || {}),
   });
 }
+/** 获取账单列表 GET /api/v1/getDataByUsedate */
+export async function getDataByUsedate(
+  params: {
+    date?:string;
+    type?:number
+  },
+  options?: { [key: string]: any },
+) {
+  return request<API.BillListItem>('/api/v1/getDataByUsedate/', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+/** 编辑账单 POST /api/v1/importBill/ */
+export async function importBill(options?: { [key: string]: any }) {
+  return request('/api/v1/importBill/', {
+    method: 'POST',
+    data: options,
+    ...(options || {}),
+  });
+}

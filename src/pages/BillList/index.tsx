@@ -9,6 +9,7 @@ import { billlist,removeBill } from '@/services/ant-design-pro/api';
 import { sum } from 'lodash';
 import AddBillModel from './AddBillModel';
 import EditBillModel from './EditBillModel';
+import ImportFile from './ImportFile';
 const handleRemove = async (value: API.BillListItem) => {
   const hide = message.loading('正在删除');
   if (!value) return true;
@@ -38,6 +39,7 @@ const TableList: React.FC = () => {
    * @zh-CN 分布更新窗口的弹窗
    * */
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
+  const [ImportModalVisible, handleImportModalVisible] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.BillListItem>();
@@ -151,7 +153,8 @@ const TableList: React.FC = () => {
           type="primary"
           key="primary"
           onClick={() => {
-            handleModalVisible(true);
+            console.log(3434)
+            handleImportModalVisible(true);
           }}
         >
           <PlusOutlined />导入
@@ -210,6 +213,12 @@ const TableList: React.FC = () => {
           actionRef.current.reload();
         }
       }}></EditBillModel>
+      <ImportFile visible={ImportModalVisible} handleModalVisible={handleImportModalVisible} submitok={()=>{
+        handleImportModalVisible(false);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
+      }}></ImportFile>
       
     </PageContainer>
   );

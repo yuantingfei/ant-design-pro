@@ -48,17 +48,18 @@
   //   path: '/list',
   //   component: './TableList',
   // },
-  {
-    name: '账单分析',
-    icon: 'table',
-    path: '/billAnalysis',
-    component: './BillAnalysis/BillAnalysis',
-  },
+
   {
     name: 'list.bill-list',
     icon: 'table',
     path: '/billlist',
     component: './BillList',
+  },
+  {
+    name: '账单分析',
+    icon: 'table',
+    path: '/billAnalysis',
+    component: './BillAnalysis/BillAnalysis',
   },
   {
     path: '/',
