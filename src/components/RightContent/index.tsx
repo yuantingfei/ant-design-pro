@@ -9,7 +9,7 @@ export type SiderTheme = 'light' | 'dark';
 
 const GlobalHeaderRight: React.FC = () => {
   const { initialState } = useModel('@@initialState');
-
+  console.log(initialState?.currentUser)
   if (!initialState || !initialState.settings) {
     return null;
   }
@@ -39,6 +39,10 @@ const GlobalHeaderRight: React.FC = () => {
   }
   return (
     <Space className={className}>
+      <Button type="link">
+      {initialState?.currentUser?.username}
+      </Button>
+      
       <Button type="link">
         个人信息
       </Button>

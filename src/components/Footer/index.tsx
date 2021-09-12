@@ -1,13 +1,8 @@
-import { useIntl } from 'umi';
 import { GithubOutlined } from '@ant-design/icons';
 import { DefaultFooter } from '@ant-design/pro-layout';
 
 export default () => {
-  const intl = useIntl();
-  const defaultMessage = intl.formatMessage({
-    id: 'app.copyright.produced',
-    defaultMessage: '我是索隆出品',
-  });
+  const defaultMessage = '我是索隆出品';
 
   const currentYear = new Date().getFullYear();
 

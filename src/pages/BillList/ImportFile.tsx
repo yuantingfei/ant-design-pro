@@ -19,13 +19,15 @@ export default function ImportFile(props:Props) {
         onVisibleChange={props.handleModalVisible}
         initialValues={{}}
         onFinish={async (value) => {
-
-          console.log(value)
           importBill(value)
-          
         }}
       >
         <ProFormUploadButton action={"/api/v1/importBill/"} name='file'></ProFormUploadButton>
+        导入口袋记账记账数据:<br></br>
+        1.在口袋记账设置中导出数据。<br></br>
+        2.拿到数据后,用excle新建一个表格，打开导出数据，全选，复制，粘贴到新表格<br></br>
+        3.保存为xls格式<br></br>
+        4.点击导入按钮,选择刚刚保存的文件<br></br>
       </ModalForm>
   );
 }

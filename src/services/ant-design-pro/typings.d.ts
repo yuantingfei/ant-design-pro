@@ -30,7 +30,7 @@ declare namespace API {
   };
   type UserInfo = {
     description?: string;
-    id?: string;
+    id?: number;
     telphtone?: string;
     username?: string;
   };
