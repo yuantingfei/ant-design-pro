@@ -126,3 +126,24 @@ export async function importBill(options?: { [key: string]: any }) {
     ...(options || {}),
   });
 }
+
+
+/** 获取操作日志列表 GET /api/v1/audit */
+export async function auditlist(
+  params: {
+    // query
+    /** 当前的页码 */
+    current?: number;
+    /** 页面的容量 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<API.AuditListItem>('/api/v1/audit/', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}

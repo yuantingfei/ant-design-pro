@@ -62,6 +62,12 @@
     component: './BillAnalysis/BillAnalysis',
   },
   {
+    name: '操作日志',
+    icon: 'table',
+    path: '/auditlist',
+    component: './AuditList',
+  },
+  {
     path: '/',
     redirect: '/welcome',
   },

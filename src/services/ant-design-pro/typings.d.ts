@@ -113,4 +113,14 @@ declare namespace API {
     description?: string;
     type?: NoticeIconItemType;
   };
+  type AuditListItem = {
+    id?: number;
+    source_ip?: string;
+    module?: string;
+    description?: string;
+    level0?: string;
+    stat_time?: string;
+    account_name?: string;
+  };
 }
+
