@@ -102,7 +102,7 @@ export async function getDataByCategory(
     ...(options || {}),
   });
 }
-/** 获取账单列表 GET /api/v1/getDataByUsedate */
+/** 获取当月账单趋势 GET /api/v1/getDataByUsedate */
 export async function getDataByUsedate(
   params: {
     date?:string;
@@ -110,7 +110,7 @@ export async function getDataByUsedate(
   },
   options?: { [key: string]: any },
 ) {
-  return request<API.BillListItem>('/api/v1/getDataByUsedate/', {
+  return request('/api/v1/getDataByUsedate/', {
     method: 'GET',
     params: {
       ...params,

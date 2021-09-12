@@ -10,12 +10,13 @@ import { cloneDeep } from 'lodash';
 const BillAnalysis: React.FC = () => {
   const [dateValue, setdateValue] = useState(moment());
   const [dateStr, setdateStr] = useState('2021-09');
+  const [moneyOutAll, setMoneyOutAll] = useState(0);
+  const [moneyInAll, setMoneyInAll] = useState(0);
   const [dataBarOut, setdataBarOut] = useState([]);
   const [dataBarIn, setdataBarIn] = useState([]);
   const [dataLine, setdataLine] = useState([]);
   const formatDateData = (date,data)=>{
     let firstMonthDay = moment(date).startOf('month');
-    console.log(firstMonthDay)
     let returnData = []
     for (let i = 0; i < 32; i++) {
       let tmpdate = cloneDeep(firstMonthDay).subtract((0-i),"day")
@@ -26,7 +27,6 @@ const BillAnalysis: React.FC = () => {
         let type0Tmp = null;
         for (let j = 0; j < data.length; j++) {
           const elementj = data[j];
-          console.log()
           if(elementj.usedate===tmpdate.format('YYYY-MM-DD')&&elementj.type===1){
             isHave1 = true;
             type1Tmp = {
@@ -68,13 +68,22 @@ const BillAnalysis: React.FC = () => {
 
       }
     }
-    console.log(returnData)
     return returnData
-    // moment().startOf('month').format('YYYY-MM-DD');
   }
   useEffect(() => {
-    getDataByUsedate({date:dateStr,type:0}).then(data=>{
-      console.log(data)
+    getDataByUsedate({date:dateStr}).then(data=>{
+      let inM = 0;
+      let outM = 0;
+      for (let i = 0; i < data.length; i++) {
+        const element = data[i];
+        if(element.type===1){
+          inM = inM + element.money;
+        }else{
+          outM = outM + element.money;
+        }
+      }
+      setMoneyInAll(inM)
+      setMoneyOutAll(outM)
       setdataLine(formatDateData(dateStr,data))
     }).catch(error=>{
       console.log(error)
@@ -152,24 +161,31 @@ const BillAnalysis: React.FC = () => {
     </Row>
     <Row style={{marginBottom: "10px"}}>
       <Col span={24}>
-        <Card title="趋势图" extra={<a href="#">More</a>} style={{ width: "100%" }}>
+        <Card title="本月概述" style={{ width: "100%" }}>
+  本月总收入:{moneyInAll}元，总支出:{moneyOutAll}元,结余:{(moneyInAll-moneyOutAll).toFixed(2)}
+        </Card>
+      </Col>
+    </Row>
+    <Row style={{marginBottom: "10px"}}>
+      <Col span={24}>
+        <Card title="趋势图" style={{ width: "100%" }}>
           <Line {...configLine} />
         </Card>
       </Col>
     </Row>
     <Row style={{marginBottom: "10px"}}>
       <Col span={12}>
-        <Card title="收入分类" extra={<a href="#">More</a>} style={{ width: "100%"  }}>
+        <Card title="收入分类" style={{ width: "100%"  }}>
           <Bar {...configBarIn}></Bar>
         </Card>
       </Col>
       <Col span={12}>
-        <Card title="支出分类" extra={<a href="#">More</a>} style={{ width: "100%"  }}>
+        <Card title="支出分类" style={{ width: "100%"  }}>
           <Bar {...configBarOut}></Bar>
         </Card>
       </Col>
     </Row>
-    <Row style={{marginBottom: "10px"}}>
+    {/* <Row style={{marginBottom: "10px"}}>
       <Col span={8}>col-8</Col>
       <Col span={8}>col-8</Col>
       <Col span={8}>col-8</Col>
@@ -179,7 +195,7 @@ const BillAnalysis: React.FC = () => {
       <Col span={6}>col-6</Col>
       <Col span={6}>col-6</Col>
       <Col span={6}>col-6</Col>
-    </Row>
+    </Row> */}
     </PageContainer>);
 };
 export default BillAnalysis;

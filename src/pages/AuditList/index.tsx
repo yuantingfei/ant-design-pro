@@ -10,6 +10,7 @@ import { sum } from 'lodash';
 import AddBillModel from './AddBillModel';
 import EditBillModel from './EditBillModel';
 import ImportFile from './ImportFile';
+import moment from 'moment';
 const handleRemove = async (value: API.AuditListItem) => {
   const hide = message.loading('正在删除');
   if (!value) return true;
@@ -84,21 +85,13 @@ const TableList: React.FC = () => {
     {
       title: '操作时间',
       dataIndex: 'stat_time',
-      search:false
-    },
-    {
-      title:'操作',
-      dataIndex: 'option',
-      valueType: 'option',
-      render: (_, record) => [
-        <a key="subscribeAlert" onClick={() => {
-          handleRemove(record)
-          actionRef.current.reload();
-        }} >
-          删除
-        </a>
-      ],
-    },
+      search:false,
+      render: (dom, entity) => {
+        return (
+          moment(entity.stat_time).format("YYYY-MM-DD HH:mm:ss")
+        );
+      },
+    }
   ];
 
   return (
