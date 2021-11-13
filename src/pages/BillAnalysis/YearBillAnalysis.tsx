@@ -7,20 +7,20 @@ import {getDataByCategory,getDataByUsedate } from '@/services/ant-design-pro/api
 import moment from 'moment';
 import { cloneDeep } from 'lodash';
 
-const BillAnalysis: React.FC = () => {
+const YearBillAnalysis: React.FC = () => {
   const [dateValue, setdateValue] = useState(moment());
-  const [dateStr, setdateStr] = useState('2021-09');
+  const [dateStr, setdateStr] = useState('2021');
   const [moneyOutAll, setMoneyOutAll] = useState(0);
   const [moneyInAll, setMoneyInAll] = useState(0);
   const [dataBarOut, setdataBarOut] = useState([]);
   const [dataBarIn, setdataBarIn] = useState([]);
   const [dataLine, setdataLine] = useState([]);
   const formatDateData = (date,data)=>{
-    let firstMonthDay = moment(date).startOf('month');
+    let firstMonthDay = moment(date).startOf('year');
     let returnData = []
-    for (let i = 0; i < 32; i++) {
+    for (let i = 0; i < 370; i++) {
       let tmpdate = cloneDeep(firstMonthDay).subtract((0-i),"day")
-      if(tmpdate.month()===firstMonthDay.month()){
+      if(tmpdate.year()===firstMonthDay.year()){
         let isHave1 = false;
         let isHave0 = false;
         let type1Tmp = null;
@@ -155,14 +155,14 @@ const BillAnalysis: React.FC = () => {
     <Row>
       <Col span={24} style={{marginBottom: "10px"}}>
         <Card title="条件选择" style={{ width: "100%" }}>
-          月份:<DatePicker onChange={onChange} value={dateValue} picker="month" />
+          年份:<DatePicker onChange={onChange} value={dateValue} picker="year" />
         </Card>
       </Col>
     </Row>
     <Row style={{marginBottom: "10px"}}>
       <Col span={24}>
         <Card title="本月概述" style={{ width: "100%" }}>
-  本月总收入:{moneyInAll}元，总支出:{moneyOutAll}元,结余:{(moneyInAll-moneyOutAll).toFixed(2)}
+  本年总收入:{moneyInAll.toFixed(2)}元，总支出:{moneyOutAll.toFixed(2)}元,结余:{(moneyInAll-moneyOutAll).toFixed(2)}
         </Card>
       </Col>
     </Row>
@@ -198,4 +198,4 @@ const BillAnalysis: React.FC = () => {
     </Row> */}
     </PageContainer>);
 };
-export default BillAnalysis;
+export default YearBillAnalysis;

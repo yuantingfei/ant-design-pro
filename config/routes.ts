@@ -59,7 +59,29 @@
     name: '账单分析',
     icon: 'table',
     path: '/billAnalysis',
-    component: './BillAnalysis/BillAnalysis'
+    routes: [
+      {
+        path: '/billAnalysis/weekPage',
+        name: '周账单分析',
+        icon: 'smile',
+        component: './BillAnalysis/WeekBillAnalysis',
+      },
+      {
+        path: '/billAnalysis/monthPage',
+        name: '月账单分析',
+        icon: 'smile',
+        component: './BillAnalysis/MonthBillAnalysis',
+      },
+      {
+        path: '/billAnalysis/yearPage',
+        name: '年账单分析',
+        icon: 'smile',
+        component: './BillAnalysis/YearBillAnalysis',
+      },
+      {
+        component: './404',
+      },
+    ],
   },
   {
     name: '操作日志',
