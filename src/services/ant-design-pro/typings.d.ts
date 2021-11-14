@@ -39,6 +39,13 @@ declare namespace API {
     current?: number;
     pageSize?: number;
   };
+  type UserItem = {
+    id?: number;
+    username?: string;
+    telphtone?: string;
+    usedate?: string;
+    description?: string;
+  };
   type BillListItem = {
     id?: number;
     category?: boolean;

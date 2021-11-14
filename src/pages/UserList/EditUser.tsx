@@ -1,7 +1,7 @@
 import { ModalForm, ProFormDatePicker, ProFormInstance, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import React, { useRef,useEffect } from 'react';
 import {message} from 'antd';
-import {editBill } from '@/services/ant-design-pro/api';
+import {editUser } from '@/services/ant-design-pro/api';
 interface Props{
     visible: boolean;
     editItem: API.BillListItem|undefined;
@@ -9,12 +9,12 @@ interface Props{
     submitok: () => void;
 }
 
-export default function EditBillModel(props:Props) {
+export default function EditUser(props:Props) {
     const editformRef = useRef<ProFormInstance>();
-    const handleEdit = async (fields: API.BillListItem) => {
+    const handleEdit = async (fields) => {
       const hide = message.loading('正在编辑');
       try {
-        await editBill({ ...fields,id:props.editItem?.id });
+        await editUser({ ...fields,id:props.editItem?.id });
         message.success('编辑成功');
         return true;
       } catch (error) {
@@ -54,40 +54,11 @@ export default function EditBillModel(props:Props) {
               message: '必填',
             },
           ]}
-          label="金额"
-          placeholder='请输入金额'
+          label="用户名"
+          placeholder='请输入用户名'
           width="md"
-          name="moneyCount"
-        />
-        <ProFormDatePicker
-        rules={[
-            {
-              required: true,
-              message: '必填',
-            },
-          ]}
-           name="usedate" label="使用日期" />
-        <ProFormSelect
-          rules={[
-            {
-              required: true,
-              message: '必填',
-            },
-          ]}
-          label="收入/支出"
-          options={[
-            {
-              value: 1,
-              label: "收入",
-            },
-            {
-              value: 0,
-              label: "支出",
-            },
-          ]}
-          placeholder='请选择'
-          width="md"
-          name="type"
+          disabled
+          name="username"
         />
         <ProFormText
           rules={[
@@ -96,14 +67,14 @@ export default function EditBillModel(props:Props) {
               message: '必填',
             },
           ]}
-          label="分类"
+          label="电话"
+          placeholder='请输入电话'
           width="md"
-          placeholder='请输入分类'
-          name="category"
+          name="telphtone"
         />
         <ProFormTextArea
         label="描述"
-        placeholder='请输入简短语言描述此账单'
+        placeholder='请输入简短语言描述此用户'
          width="md" name="description" />
       </ModalForm>
   );

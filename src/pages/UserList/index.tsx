@@ -5,17 +5,16 @@ import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { auditlist,removeBill } from '@/services/ant-design-pro/api';
+import { userlist,deleteUser } from '@/services/ant-design-pro/api';
 import { sum } from 'lodash';
-import AddBillModel from './AddBillModel';
-import EditBillModel from './EditBillModel';
+import AddUser from './AddUser';
+import EditUser from './EditUser';
 import ImportFile from './ImportFile';
-import moment from 'moment';
-const handleRemove = async (value: API.AuditListItem) => {
+const handleRemove = async (value: API.UserItem) => {
   const hide = message.loading('正在删除');
   if (!value) return true;
   try {
-    const success = await removeBill({
+    const success = await deleteUser({
       id: value.id,
     });
     hide();
@@ -43,8 +42,8 @@ const TableList: React.FC = () => {
   const [ImportModalVisible, handleImportModalVisible] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.AuditListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.AuditListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.UserItem>();
+  const [selectedRowsState, setSelectedRows] = useState<API.UserItem[]>([]);
 
   /**
    * @en-US International configuration
@@ -52,9 +51,9 @@ const TableList: React.FC = () => {
    * */
   const intl = useIntl();
 
-  const columns: ProColumns<API.AuditListItem>[] = [
+  const columns: ProColumns<API.UserItem>[] = [
     {
-      title: 'ID',
+      title: '用户ID',
       dataIndex: 'id',
       key:'id',
       search:false,
@@ -65,47 +64,68 @@ const TableList: React.FC = () => {
       },
     },
     {
-      title: '模块',
-      dataIndex: 'module',
+      title: '用户名',
+      dataIndex: 'username',
       valueType: 'textarea',
-      search:false
     },
     {
-      title: '操作IP',
-      dataIndex: 'source_ip',
+      title: '电话',
+      dataIndex: 'telphtone',
       valueType: 'textarea',
-      search:false
     },
     {
       title: '描述',
       dataIndex: 'description',
       valueType: 'textarea',
     },
-    
     {
-      title: '操作时间',
-      dataIndex: 'stat_time',
-      search:false,
-      render: (dom, entity) => {
-        return (
-          moment(entity.stat_time).format("YYYY-MM-DD HH:mm:ss")
-        );
-      },
-    }
+      title:'操作',
+      dataIndex: 'option',
+      valueType: 'option',
+      render: (_, record) => [
+        <a
+          key="config"
+          onClick={() => {
+            setCurrentRow(record);
+            handleUpdateModalVisible(true)
+          }}
+        >
+          编辑
+        </a>,
+        // <a key="subscribeAlert" href="https://procomponents.ant.design/">
+        //   查看文档
+        // </a>,
+        <a key="subscribeAlert" onClick={() => {
+          handleRemove(record)
+          actionRef.current.reload();
+        }} >
+          删除
+        </a>
+      ],
+    },
   ];
 
   return (
     <PageContainer>
-      <ProTable<API.AuditListItem, API.PageParams>
-        headerTitle={'操作日志列表'}
+      <ProTable<API.UserItem, API.PageParams>
+        headerTitle={'用户列表'}
         actionRef={actionRef}
         rowKey="id"
         search={{
           labelWidth: 120,
         }}
         toolBarRender={() => [
+          <Button
+            type="primary"
+            key="primary"
+            onClick={() => {
+              handleModalVisible(true);
+            }}
+          >
+            <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
+          </Button>
         ]}
-        request={auditlist}
+        request={userlist}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -115,22 +135,6 @@ const TableList: React.FC = () => {
       />
       {selectedRowsState?.length > 0 && (
         <FooterToolbar
-          extra={
-            <div>
-              <FormattedMessage id="pages.searchTable.chosen" defaultMessage="Chosen" />{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              <FormattedMessage id="pages.searchTable.item" defaultMessage="项" />
-              &nbsp;&nbsp;
-              合计:{sum(selectedRowsState.map(i => {
-                 if(i.type===0){
-                   return 0-parseFloat(i.moneyCount);
-                 }else{
-                  return i.moneyCount;
-                 }
-                }
-                 ))}
-            </div>
-          }
         >
           <Button
             onClick={async () => {
@@ -146,6 +150,24 @@ const TableList: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
+      <AddUser visible={createModalVisible} handleModalVisible={handleModalVisible} submitok={()=>{
+        handleModalVisible(false);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
+      }}></AddUser>
+      <EditUser editItem={currentRow} visible={updateModalVisible} handleModalVisible={handleUpdateModalVisible} submitok={()=>{
+        handleUpdateModalVisible(false);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
+      }}></EditUser>
+      <ImportFile visible={ImportModalVisible} handleModalVisible={handleImportModalVisible} submitok={()=>{
+        handleImportModalVisible(false);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
+      }}></ImportFile>
       
     </PageContainer>
   );

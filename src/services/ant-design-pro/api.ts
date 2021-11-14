@@ -32,7 +32,58 @@ export async function logout() {
     data: {}
   });
 }
-
+/** 获取用户列表 GET /api/v1/userlist */
+export async function userlist(
+  params: {
+    // query
+    /** 当前的页码 */
+    current?: number;
+    /** 页面的容量 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<API.UserItem>('/api/v1/userlist/', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+/** 新建用户 POST /api/v1/addUser/ */
+export async function addUser(options?: { [key: string]: any }) {
+  return request('/api/v1/addUser/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
+/** 删除用户 POST /api/v1/deleteUser/ */
+export async function deleteUser(options?: { [key: string]: any }) {
+  return request('/api/v1/deleteUser/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
+/** 编辑用户 POST /api/v1/editUser/ */
+export async function editUser(options?: { [key: string]: any }) {
+  return request<API.BillListItem>('/api/v1/editUser/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
 /** 获取账单列表 GET /api/v1/bill */
 export async function billlist(
   params: {
