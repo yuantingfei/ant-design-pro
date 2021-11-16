@@ -88,6 +88,12 @@
     icon: 'table',
     path: '/auditlist',
     component: './AuditList',
+  },
+  {
+    name: '基金动态',
+    icon: 'table',
+    path: '/jijinlist',
+    component: './JijinList',
     
   },
   {

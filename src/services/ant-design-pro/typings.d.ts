@@ -129,5 +129,24 @@ declare namespace API {
     stat_time?: string;
     account_name?: string;
   };
+  type JijinItem = {
+    id?: number;
+    "week": string;
+    "code": string;
+    "name": string;
+    "dqjz": string;
+    "month3": string;
+    "number": number;
+    "value": string;
+    "month": string;
+    "ztjz": string;
+    "month6": string;
+    "year": string;
+    "timeStr": string;
+    "year3": string;
+    "year2": string;
+    "ztzf": string;
+    "overyear": string;
+  };
 }
 

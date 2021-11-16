@@ -1,14 +1,16 @@
 import { Button, Space,Modal } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import React from 'react';
+import React, { useState } from 'react';
 import { history, useModel } from 'umi';
 import styles from './index.less';
 import { logout } from '@/services/ant-design-pro/api';
 const { confirm } = Modal;
+import Info from './Info';
 export type SiderTheme = 'light' | 'dark';
 
 const GlobalHeaderRight: React.FC = () => {
   const { initialState } = useModel('@@initialState');
+  const [InfoVisible, setInfoVisible] = useState(false)
   console.log(initialState?.currentUser)
   if (!initialState || !initialState.settings) {
     return null;
@@ -43,7 +45,9 @@ const GlobalHeaderRight: React.FC = () => {
       {initialState?.currentUser?.username}
       </Button>
       
-      <Button type="link">
+      <Button onClick={()=>{
+        setInfoVisible(true)
+      }} type="link">
         个人信息
       </Button>
       <Button type="link" onClick={()=>{
@@ -51,6 +55,9 @@ const GlobalHeaderRight: React.FC = () => {
       }}>
         退出
       </Button>
+      <Info visible={InfoVisible} cancel={()=>{
+        setInfoVisible(false)
+      }}></Info>
     </Space>
   );
 };

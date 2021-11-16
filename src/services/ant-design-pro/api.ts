@@ -198,3 +198,22 @@ export async function auditlist(
     ...(options || {}),
   });
 }
+/** 获取基金动态列表 GET /api/v1/jijin/ */
+export async function jijinlist(
+  params: {
+    // query
+    /** 当前的页码 */
+    current?: number;
+    /** 页面的容量 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<API.JijinItem>('/api/v1/jijin/', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
