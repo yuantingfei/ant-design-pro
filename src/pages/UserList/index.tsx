@@ -77,6 +77,19 @@ const TableList: React.FC = () => {
       title: '描述',
       dataIndex: 'description',
       valueType: 'textarea',
+      search:false
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'created',
+      valueType: 'textarea',
+      search:false
+    },
+    {
+      title: '最近登录时间',
+      dataIndex: 'logintime',
+      valueType: 'textarea',
+      search:false
     },
     {
       title:'操作',

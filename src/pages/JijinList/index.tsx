@@ -114,7 +114,7 @@ const TableList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.JijinItem, API.PageParams>
-        headerTitle={'操作日志列表'}
+        headerTitle={'基金动态列表'}
         actionRef={actionRef}
         rowKey="id"
         search={{
@@ -130,39 +130,6 @@ const TableList: React.FC = () => {
           },
         }}
       />
-      {selectedRowsState?.length > 0 && (
-        <FooterToolbar
-          extra={
-            <div>
-              <FormattedMessage id="pages.searchTable.chosen" defaultMessage="Chosen" />{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              <FormattedMessage id="pages.searchTable.item" defaultMessage="项" />
-              &nbsp;&nbsp;
-              合计:{sum(selectedRowsState.map(i => {
-                 if(i.type===0){
-                   return 0-parseFloat(i.moneyCount);
-                 }else{
-                  return i.moneyCount;
-                 }
-                }
-                 ))}
-            </div>
-          }
-        >
-          <Button
-            onClick={async () => {
-              for (let index = 0; index < selectedRowsState.length; index++) {
-                const element = selectedRowsState[index];
-                await handleRemove(element);
-              }
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
-            }}
-          >
-            批量删除
-          </Button>
-        </FooterToolbar>
-      )}
       
     </PageContainer>
   );
