@@ -5,23 +5,24 @@ import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { jijinlist,removeBill } from '@/services/ant-design-pro/api';
+import { jijinlistmy,deleteCode } from '@/services/ant-design-pro/api';
 import { sum } from 'lodash';
 import moment from 'moment';
+import AddCodeModel from './AddCodeModel';
 const handleRemove = async (value: API.JijinItem) => {
   const hide = message.loading('正在删除');
   if (!value) return true;
   try {
-    const success = await removeBill({
-      id: value.id,
+    const success = await deleteCode({
+      code: value.code,
     });
     hide();
     
-    message.success('删除成功');
+    message.success('取消关注成功');
     return true;
   } catch (error) {
     hide();
-    message.error('删除失败');
+    message.error('取消关注失败');
     return false;
   }
 };
@@ -37,7 +38,6 @@ const TableList: React.FC = () => {
    * @zh-CN 分布更新窗口的弹窗
    * */
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [ImportModalVisible, handleImportModalVisible] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.JijinItem>();
@@ -109,20 +109,42 @@ const TableList: React.FC = () => {
       valueType: 'textarea',
       search:false
     },
+    {
+      title:'操作',
+      dataIndex: 'option',
+      valueType: 'option',
+      render: (_, record) => [
+        <a key="subscribeAlert" onClick={() => {
+          handleRemove(record)
+          actionRef.current.reload();
+        }} >
+          不在关注
+        </a>
+      ],
+    },
   ];
 
   return (
     <PageContainer>
       <ProTable<API.JijinItem, API.PageParams>
-        headerTitle={'基金动态列表'}
+        headerTitle={'我关注基金列表'}
         actionRef={actionRef}
         rowKey="id"
         search={{
           labelWidth: 120,
         }}
         toolBarRender={() => [
+          <Button
+            type="primary"
+            key="primary"
+            onClick={() => {
+              handleModalVisible(true);
+            }}
+          >
+            <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
+          </Button>
         ]}
-        request={jijinlist}
+        request={jijinlistmy}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -130,7 +152,12 @@ const TableList: React.FC = () => {
           },
         }}
       />
-      
+      <AddCodeModel visible={createModalVisible} handleModalVisible={handleModalVisible} submitok={()=>{
+        handleModalVisible(false);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
+      }}></AddCodeModel>
     </PageContainer>
   );
 };

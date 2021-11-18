@@ -20,7 +20,7 @@ export default function AddBillModel(props:Props) {
         return true;
       } catch (error) {
         hide();
-        message.error('添加失败，请核对好数据后再是一次');
+        message.error('添加失败，请核对好数据后再试一次');
         return false;
       }
     };

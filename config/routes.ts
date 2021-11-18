@@ -97,6 +97,13 @@
     
   },
   {
+    name: '我的基金',
+    icon: 'table',
+    path: '/jijinlistMy',
+    component: './JijinList/JijinMy',
+    
+  },
+  {
     path: '/',
     redirect: '/welcome',
   },

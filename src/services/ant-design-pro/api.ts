@@ -217,3 +217,44 @@ export async function jijinlist(
     ...(options || {}),
   });
 }
+/** 获取我关注的基金动态列表 GET /api/v1/jijinmy/ */
+export async function jijinlistmy(
+  params: {
+    // query
+    /** 当前的页码 */
+    current?: number;
+    /** 页面的容量 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<API.JijinItem>('/api/v1/jijinmy/', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+/** 新建我的基金关注 POST /api/v1/addCode/ */
+export async function addCode(options?: { [key: string]: any }) {
+  return request('/api/v1/addCode/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
+/** 删除我的基金关注 POST /api/v1/deleteCode/ */
+export async function deleteCode(options?: { [key: string]: any }) {
+  return request('/api/v1/deleteCode/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
