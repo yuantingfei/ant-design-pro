@@ -108,6 +108,12 @@
         path: '/jijin/JijinHistory',
         component: './JijinList/JijinHistory',
       },
+      {
+        name: '历史数据(图)',
+        icon: 'table',
+        path: '/jijin/JijinHistoryMap',
+        component: './JijinList/JijinHistoryMap',
+      },
     ],
   },
   
