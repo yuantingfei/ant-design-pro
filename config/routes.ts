@@ -60,12 +60,12 @@
     icon: 'table',
     path: '/billAnalysis',
     routes: [
-      {
-        path: '/billAnalysis/weekPage',
-        name: '周账单分析',
-        icon: 'smile',
-        component: './BillAnalysis/WeekBillAnalysis',
-      },
+      // {
+      //   path: '/billAnalysis/weekPage',
+      //   name: '周账单分析',
+      //   icon: 'smile',
+      //   component: './BillAnalysis/WeekBillAnalysis',
+      // },
       {
         path: '/billAnalysis/monthPage',
         name: '月账单分析',
@@ -84,24 +84,39 @@
     ],
   },
   {
+    name: '基金信息',
+    icon: 'table',
+    path: '/jijin',
+    routes: [
+      {
+        name: '基金动态',
+        icon: 'table',
+        path: '/jijin/jijinlist',
+        access: 'canAdmin',
+        component: './JijinList',
+        
+      },
+      {
+        name: '我的基金',
+        icon: 'table',
+        path: '/jijin/jijinlistMy',
+        component: './JijinList/JijinMy',
+      },
+      {
+        name: '历史数据',
+        icon: 'table',
+        path: '/jijin/JijinHistory',
+        component: './JijinList/JijinHistory',
+      },
+    ],
+  },
+  
+  
+  {
     name: '操作日志',
     icon: 'table',
     path: '/auditlist',
     component: './AuditList',
-  },
-  {
-    name: '基金动态',
-    icon: 'table',
-    path: '/jijinlist',
-    component: './JijinList',
-    
-  },
-  {
-    name: '我的基金',
-    icon: 'table',
-    path: '/jijinlistMy',
-    component: './JijinList/JijinMy',
-    
   },
   {
     path: '/',

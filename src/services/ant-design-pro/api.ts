@@ -236,6 +236,25 @@ export async function jijinlistmy(
     ...(options || {}),
   });
 }
+/** 获取我基金的历史列表 GET /api/v1/jijinlisthistory/ */
+export async function jijinListHistory(
+  params: {
+    // query
+    /** 当前的页码 */
+    current?: number;
+    /** 页面的容量 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<API.JijinHistoryItem>('/api/v1/jijinListHistory/', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
 /** 新建我的基金关注 POST /api/v1/addCode/ */
 export async function addCode(options?: { [key: string]: any }) {
   return request('/api/v1/addCode/', {

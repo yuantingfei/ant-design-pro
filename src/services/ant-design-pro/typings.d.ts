@@ -148,5 +148,13 @@ declare namespace API {
     "ztzf": string;
     "overyear": string;
   };
+  type JijinHistoryItem = {
+    id?: number;
+    "code":string;
+    "zf":string;
+    "ljvalue":string;
+    "value":string;
+    "timeStr":string;
+  };
 }
-
+  

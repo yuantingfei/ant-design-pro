@@ -5,23 +5,24 @@ import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { jijinlist,removeBill } from '@/services/ant-design-pro/api';
+import { jijinListHistory,deleteCode } from '@/services/ant-design-pro/api';
 import { sum } from 'lodash';
 import moment from 'moment';
-const handleRemove = async (value: API.JijinItem) => {
+import AddCodeModel from './AddCodeModel';
+const handleRemove = async (value: API.JijinHistoryItem) => {
   const hide = message.loading('正在删除');
   if (!value) return true;
   try {
-    const success = await removeBill({
-      id: value.id,
+    const success = await deleteCode({
+      code: value.code,
     });
     hide();
     
-    message.success('删除成功');
+    message.success('取消关注成功');
     return true;
   } catch (error) {
     hide();
-    message.error('删除失败');
+    message.error('取消关注失败');
     return false;
   }
 };
@@ -37,97 +38,101 @@ const TableList: React.FC = () => {
    * @zh-CN 分布更新窗口的弹窗
    * */
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [ImportModalVisible, handleImportModalVisible] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.JijinItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.JijinItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.JijinHistoryItem>();
+  const [selectedRowsState, setSelectedRows] = useState<API.JijinHistoryItem[]>([]);
 
   /**
    * @en-US International configuration
    * @zh-CN 国际化配置
    * */
   const intl = useIntl();
-  const columns: ProColumns<API.JijinItem>[] = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key:'id',
-      search:false,
-      render: (dom, entity) => {
-        return (
-          entity.id
-        );
-      },
-    },
-    {
-      title: '基金名称',
-      dataIndex: 'name',
-      valueType: 'textarea',
-      search:true
-    },
+  const columns: ProColumns<API.JijinHistoryItem>[] = [
+    // {
+    //   title: 'ID',
+    //   dataIndex: 'id',
+    //   key:'id',
+    //   search:false,
+    //   render: (dom, entity) => {
+    //     return (
+    //       entity.id
+    //     );
+    //   },
+    // },
     {
       title: '基金代号',
       dataIndex: 'code',
       valueType: 'textarea',
-      search:true,
-      render: (dom, entity) => {
-        return (
-          entity.code
-        );
-      },
+      search:true
     },
     {
-      title: '当前净值',
-      dataIndex: 'dqjz',
+      title: '单位净值',
+      dataIndex: 'value',
       valueType: 'textarea',
       search:false
     },
     {
-      title: '当前涨幅(比上个交易日)',
-      dataIndex: 'value',
+      title: '累计净值',
+      dataIndex: 'ljvalue',
+      valueType: 'textarea',
+      search:false
+    },
+    {
+      title: '涨幅(比上个交易日)',
+      dataIndex: 'zf',
       valueType: 'textarea',
       search:false,
       render: (dom, entity) => {
         if(parseFloat(entity.value)>0){
-          return <span style={{color:"red"}}>{entity.value}</span>
+          return <span style={{color:"red"}}>{entity.zf}</span>
         }else{
-          return <span style={{color:"green"}}>{entity.value}</span>
+          return <span style={{color:"green"}}>{entity.zf}</span>
         }
       },
     },
     {
-      title: '昨天净值',
-      dataIndex: 'ztjz',
-      valueType: 'textarea',
-      search:false
-    },
-    {
-      title: '昨天涨幅(比上个交易日)',
-      dataIndex: 'ztzf',
-      valueType: 'textarea',
-      search:false
-    },
-    {
-      title: '更新时间',
+      title: '时间',
       dataIndex: 'timeStr',
       valueType: 'textarea',
-      search:false
+      search:true
     },
+    // {
+    //   title:'操作',
+    //   dataIndex: 'option',
+    //   valueType: 'option',
+    //   render: (_, record) => [
+    //     <a key="subscribeAlert" onClick={() => {
+    //       handleRemove(record)
+    //       actionRef.current.reload();
+    //     }} >
+    //       不在关注
+    //     </a>
+    //   ],
+    // },
   ];
 
   return (
     <PageContainer>
-      <ProTable<API.JijinItem, API.PageParams>
-        headerTitle={'基金动态列表'}
+      <ProTable<API.JijinHistoryItem, API.PageParams>
+        headerTitle={'我关注基金列表'}
         actionRef={actionRef}
         rowKey="id"
         search={{
           labelWidth: 120,
         }}
         toolBarRender={() => [
+          <Button
+            type="primary"
+            key="primary"
+            onClick={() => {
+              handleModalVisible(true);
+            }}
+          >
+            <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
+          </Button>
         ]}
-        request={jijinlist}
+        request={jijinListHistory}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -135,7 +140,6 @@ const TableList: React.FC = () => {
           },
         }}
       />
-      
     </PageContainer>
   );
 };
