@@ -23,6 +23,10 @@ export default (): React.ReactNode => {
   setInterval(()=>{
     setdatetime(moment())
   },1000)
+  const goPage = (url)=>{
+    window.open(url,"_blank")
+  }
+
   return (
     <PageContainer>
       <Card>
@@ -46,6 +50,30 @@ export default (): React.ReactNode => {
             marginBottom: 24,
           }}
         />
+      </Card>
+      <Card title="常用链接">
+        <Card.Grid style={{width:"auto",textAlign:"center"}} >
+          <a onClick={()=>{
+            goPage("https://www.baidu.com")  
+          }}>百度一下</a>
+        </Card.Grid>
+        <Card.Grid style={{width:"auto",textAlign:"center"}} >
+        <a onClick={()=>{
+            goPage("https://ant.design/index-cn")  
+          }}>Ant.Design</a>
+        </Card.Grid>
+      </Card>
+      <Card title="我的收藏">
+        <Card.Grid style={{width:"auto",textAlign:"center"}} >
+          <a onClick={()=>{
+            goPage("https://www.baidu.com")  
+          }}>百度一下</a>
+        </Card.Grid>
+        <Card.Grid style={{width:"auto",textAlign:"center"}} >
+        <a onClick={()=>{
+            goPage("https://ant.design/index-cn")  
+          }}>Ant.Design</a>
+        </Card.Grid>
       </Card>
     </PageContainer>
   );
