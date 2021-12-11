@@ -277,3 +277,52 @@ export async function deleteCode(options?: { [key: string]: any }) {
     ...(options || {}),
   });
 }
+
+/** 获取Link列表 GET /api/v1/link */
+export async function linklist(
+  params: {
+    // query
+    /** 当前的页码 */
+    current?: number;
+    /** 页面的容量 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<API.LinkListItem>('/api/v1/link/', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+/** 新建Link POST /api/v1/addLink/ */
+export async function addLink(options?: { [key: string]: any }) {
+  return request<API.LinkListItem>('/api/v1/addLink/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
+/** 删除Link POST /api/v1/deleteLink/ */
+export async function removeLink(options?: { [key: string]: any }) {
+  return request('/api/v1/deleteLink/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
+/** 获取Link GET /api/v1/listBySelf */
+export async function listBySelf() {
+  return request('/api/v1/link/', {
+    method: 'GET',
+    params: {},
+  });
+}

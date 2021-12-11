@@ -156,5 +156,13 @@ declare namespace API {
     "value":string;
     "timeStr":string;
   };
+  type LinkListItem = {
+    id?: number;
+    text?: string;
+    url?: string;
+    mod_date?: string;
+    add_date?: string;
+    type?: number;
+  };
 }
   

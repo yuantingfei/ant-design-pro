@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Card, Alert, Typography } from 'antd';
 import { useIntl, FormattedMessage } from 'umi';
 import styles from './Welcome.less';
 import moment from 'moment';
-
+import AddModel from './../pages/LinkList/AddModel';
+import { listBySelf } from '@/services/ant-design-pro/api';
 const CodePreview: React.FC = ({ children }) => (
   <pre className={styles.pre}>
     <code>
@@ -15,7 +16,9 @@ const CodePreview: React.FC = ({ children }) => (
 
 export default (): React.ReactNode => {
   const intl = useIntl();
+  const [urls, seturls] = useState([])
   const [datetime, setdatetime] = useState(moment())
+  const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   //今年第一天
   const [jinnaindate, setjinnaindate] = useState(moment().startOf('year'))
   //本月第一天
@@ -26,7 +29,15 @@ export default (): React.ReactNode => {
   const goPage = (url)=>{
     window.open(url,"_blank")
   }
-
+  const getUrl= ()=>{
+    listBySelf().then(res=>{
+      console.log(res)
+      seturls(res.data)
+    })
+  }
+  useEffect(() => {
+    getUrl()
+  }, [])
   return (
     <PageContainer>
       <Card>
@@ -57,24 +68,27 @@ export default (): React.ReactNode => {
             goPage("https://www.baidu.com")  
           }}>百度一下</a>
         </Card.Grid>
-        <Card.Grid style={{width:"auto",textAlign:"center"}} >
-        <a onClick={()=>{
-            goPage("https://ant.design/index-cn")  
-          }}>Ant.Design</a>
-        </Card.Grid>
       </Card>
       <Card title="我的收藏">
+        {urls.map(i=>{
+          return (<>
+           <Card.Grid style={{width:"auto",textAlign:"center"}} >
+          <a onClick={()=>{
+            goPage(i.url)  
+          }}>{i.text}</a>
+        </Card.Grid>
+          </>)
+        })}
         <Card.Grid style={{width:"auto",textAlign:"center"}} >
           <a onClick={()=>{
-            goPage("https://www.baidu.com")  
-          }}>百度一下</a>
-        </Card.Grid>
-        <Card.Grid style={{width:"auto",textAlign:"center"}} >
-        <a onClick={()=>{
-            goPage("https://ant.design/index-cn")  
-          }}>Ant.Design</a>
+            handleModalVisible(true)
+          }}>添加</a>
         </Card.Grid>
       </Card>
+      <AddModel visible={createModalVisible} handleModalVisible={handleModalVisible} submitok={()=>{
+        handleModalVisible(false);
+        getUrl()
+      }}></AddModel>
     </PageContainer>
   );
 };

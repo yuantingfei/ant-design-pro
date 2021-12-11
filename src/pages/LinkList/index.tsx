@@ -1,34 +1,33 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, message, } from 'antd';
 import React, { useState, useRef } from 'react';
-import { useIntl, FormattedMessage, Link } from 'umi';
+import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { jijinlistmy,deleteCode } from '@/services/ant-design-pro/api';
+import { linklist,removeLink } from '@/services/ant-design-pro/api';
 import { sum } from 'lodash';
-import moment from 'moment';
-import { useHistory } from "react-router-dom";
-import AddCodeModel from './AddCodeModel';
-const handleRemove = async (value: API.JijinItem) => {
+import AddModel from './AddModel';
+import ImportFile from './ImportFile';
+const handleRemove = async (value: API.LinkListItem) => {
   const hide = message.loading('正在删除');
   if (!value) return true;
   try {
-    const success = await deleteCode({
-      code: value.code,
+    const success = await removeLink({
+      id: value.id,
     });
     hide();
     
-    message.success('取消关注成功');
+    message.success('删除成功');
     return true;
   } catch (error) {
     hide();
-    message.error('取消关注失败');
+    message.error('删除失败');
     return false;
   }
 };
 
-const TableList: React.FC = () => {
+const UserList: React.FC = () => {
   /**
    * @en-US Pop-up window of new window
    * @zh-CN 新建窗口的弹窗
@@ -39,24 +38,19 @@ const TableList: React.FC = () => {
    * @zh-CN 分布更新窗口的弹窗
    * */
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
+  const [ImportModalVisible, handleImportModalVisible] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.JijinItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.JijinItem[]>([]);
-  const history = useHistory();  
+  const [currentRow, setCurrentRow] = useState<API.LinkListItem>();
+  const [selectedRowsState, setSelectedRows] = useState<API.LinkListItem[]>([]);
+
   /**
    * @en-US International configuration
    * @zh-CN 国际化配置
    * */
   const intl = useIntl();
-  function handleClick() {    
-    history.push({
-      pathname:"/jijin/JijinHistory",state:{
-        code:12344
-      }
-    });  
-  }  
-  const columns: ProColumns<API.JijinItem>[] = [
+
+  const columns: ProColumns<API.LinkListItem>[] = [
     {
       title: 'ID',
       dataIndex: 'id',
@@ -69,53 +63,20 @@ const TableList: React.FC = () => {
       },
     },
     {
-      title: '基金名称',
-      dataIndex: 'name',
+      title: 'Text',
+      dataIndex: 'text',
       valueType: 'textarea',
-      search:true
     },
     {
-      title: '基金代号',
-      dataIndex: 'code',
-      valueType: 'textarea',
-      search:true
-    },
-    {
-      title: '当前净值',
-      dataIndex: 'dqjz',
-      valueType: 'textarea',
-      search:false
-    },
-    {
-      title: '当前涨幅(比上个交易日)',
-      dataIndex: 'value',
+      title: 'URL',
+      dataIndex: 'url',
       valueType: 'textarea',
       search:false,
-      render: (dom, entity) => {
-        if(parseFloat(entity.value)>0){
-          return <span style={{color:"red"}}>{entity.value}</span>
-        }else{
-          return <span style={{color:"green"}}>{entity.value}</span>
-        }
-      },
     },
     {
-      title: '昨天净值',
-      dataIndex: 'ztjz',
-      valueType: 'textarea',
-      search:false
-    },
-    {
-      title: '昨天涨幅(比上个交易日)',
-      dataIndex: 'ztzf',
-      valueType: 'textarea',
-      search:false
-    },
-    {
-      title: '更新时间',
-      dataIndex: 'timeStr',
-      valueType: 'textarea',
-      search:false
+      title: '最近修改时间',
+      dataIndex: 'mod_date',
+      search:false,
     },
     {
       title:'操作',
@@ -126,23 +87,16 @@ const TableList: React.FC = () => {
           handleRemove(record)
           actionRef.current.reload();
         }} >
-          不在关注
-        </a>,
-          <a key="subscribeAlert" onClick={() => {
-            handleClick()
-        }} >
-          历史涨幅
+          删除
         </a>
-        ,
-        
       ],
     },
   ];
 
   return (
     <PageContainer>
-      <ProTable<API.JijinItem, API.PageParams>
-        headerTitle={'我关注基金列表'}
+      <ProTable<API.LinkListItem, API.PageParams>
+        headerTitle={'收藏列表'}
         actionRef={actionRef}
         rowKey="id"
         search={{
@@ -157,9 +111,18 @@ const TableList: React.FC = () => {
             }}
           >
             <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
-          </Button>
+          </Button>,
+          <Button
+          type="primary"
+          key="primary"
+          onClick={() => {
+            console.log(3434)
+            handleImportModalVisible(true);
+          }}
+        >
+        </Button>,
         ]}
-        request={jijinlistmy}
+        request={linklist}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -167,14 +130,40 @@ const TableList: React.FC = () => {
           },
         }}
       />
-      <AddCodeModel visible={createModalVisible} handleModalVisible={handleModalVisible} submitok={()=>{
+      {selectedRowsState?.length > 0 && (
+        <FooterToolbar
+          extra={
+            <div>
+              <FormattedMessage id="pages.searchTable.chosen" defaultMessage="Chosen" />{' '}
+              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
+              <FormattedMessage id="pages.searchTable.item" defaultMessage="项" />
+              
+            </div>
+          }
+        >
+          <Button
+            onClick={async () => {
+              for (let index = 0; index < selectedRowsState.length; index++) {
+                const element = selectedRowsState[index];
+                await handleRemove(element);
+              }
+              setSelectedRows([]);
+              actionRef.current?.reloadAndRest?.();
+            }}
+          >
+            批量删除
+          </Button>
+        </FooterToolbar>
+      )}
+      <AddModel visible={createModalVisible} handleModalVisible={handleModalVisible} submitok={()=>{
         handleModalVisible(false);
         if (actionRef.current) {
           actionRef.current.reload();
         }
-      }}></AddCodeModel>
+      }}></AddModel>
+      
     </PageContainer>
   );
 };
 
-export default TableList;
+export default UserList;

@@ -102,22 +102,27 @@
         path: '/jijin/jijinlistMy',
         component: './JijinList/JijinMy',
       },
-      {
-        name: '历史数据',
-        icon: 'table',
-        path: '/jijin/JijinHistory',
-        component: './JijinList/JijinHistory',
-      },
-      {
-        name: '历史数据(图)',
-        icon: 'table',
-        path: '/jijin/JijinHistoryMap',
-        component: './JijinList/JijinHistoryMap',
-      },
+      // {
+      //   name: '历史数据',
+      //   icon: 'table',
+      //   path: '/jijin/JijinHistory',
+      //   component: './JijinList/JijinHistory',
+      // },
+      // {
+      //   name: '历史数据(图)',
+      //   icon: 'table',
+      //   path: '/jijin/JijinHistoryMap',
+      //   component: './JijinList/JijinHistoryMap',
+      // },
     ],
   },
   
-  
+  {
+    path: '/LinkList',
+    name: '收藏管理',
+    icon: 'smile',
+    component: './LinkList/index',
+  },
   {
     name: '操作日志',
     icon: 'table',
