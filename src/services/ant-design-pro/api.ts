@@ -321,7 +321,7 @@ export async function removeLink(options?: { [key: string]: any }) {
 }
 /** 获取Link GET /api/v1/listBySelf */
 export async function listBySelf() {
-  return request('/api/v1/link/', {
+  return request('/api/v1/listBySelf/', {
     method: 'GET',
     params: {},
   });
