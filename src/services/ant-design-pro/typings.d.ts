@@ -164,5 +164,26 @@ declare namespace API {
     add_date?: string;
     type?: number;
   };
+  type GupiaoListItem = {
+    id?: number;
+    code?: string;
+    name?: string;
+    mod_date?: string;
+    add_date?: string;
+    value?: string;
+  };
+  type GupiaoConfigListItem = {
+    id?: number;
+    code?: string;
+    value?: string;
+    op?: string;
+    mod_date?: string;
+    add_date?: string;
+    userinfoId?: number;
+    url?: string;
+    time?: number;
+    timesUsed?: number;
+    status?: number;
+  };
 }
   

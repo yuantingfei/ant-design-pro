@@ -326,3 +326,84 @@ export async function listBySelf() {
     params: {},
   });
 }
+
+/** 新建addGupiao POST /api/v1/gupiao/addGupiao/ */
+export async function addGupiao(options?: { [key: string]: any; }) {
+  return request<API.LinkListItem>('/api/v1/gupiao/add/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
+export async function addGupiaoConfig(options?: { [key: string]: any; }) {
+  return request<API.GupiaoConfigListItem>('/api/v1/gupiao/addConfig/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
+/** 获取Gupiao GET /api/v1/gupiao/list/ */
+export async function listGupiao(
+  params: {
+    // query
+    /** 当前的页码 */
+    current?: number;
+    /** 页面的容量 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any; },
+) {
+  return request<API.GupiaoListItem>('/api/v1/gupiao/list/', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+export async function listConfig(
+  params: {
+    // query
+    /** 当前的页码 */
+    current?: number;
+    /** 页面的容量 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any; },
+) {
+  return request<API.GupiaoConfigListItem>('/api/v1/gupiao/listConfig/', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+/** 删除Link POST /api/v1/gupiao/delete */
+export async function removeGupiao(options?: { [key: string]: any; }) {
+  return request('/api/v1/gupiao/delete/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
+
+export async function removeGupiaoConfig(options?: { [key: string]: any; }) {
+  return request('/api/v1/gupiao/deleteConfig/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}

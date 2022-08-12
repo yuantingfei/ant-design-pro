@@ -116,7 +116,27 @@
       // },
     ],
   },
-  
+  {
+    name: '股票信息',
+    icon: 'table',
+    path: '/gupiao',
+    routes: [
+      {
+        name: '股票动态',
+        icon: 'table',
+        path: '/gupiao/gupiaolist',
+        access: 'canAdmin',
+        component: './GupiaoList',
+      },
+      {
+        name: '股票提醒配置',
+        icon: 'table',
+        path: '/gupiao/config',
+        access: 'canAdmin',
+        component: './GupiaoList/Config',
+      }
+    ],
+  },
   {
     path: '/LinkList',
     name: '收藏管理',
