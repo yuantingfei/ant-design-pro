@@ -71,13 +71,19 @@ const UserList: React.FC = () => {
       dataIndex: 'name',
     },
     {
-      title: 'value',
+      title: '当前价格',
       dataIndex: 'value',
       valueType: 'textarea',
       search:false,
     },
     {
-      title: '最近修改时间',
+      title: '当前涨幅',
+      dataIndex: 'dqzf',
+      valueType: 'textarea',
+      search:false,
+    },
+    {
+      title: '更新时间',
       dataIndex: 'mod_date',
       search:false,
     },

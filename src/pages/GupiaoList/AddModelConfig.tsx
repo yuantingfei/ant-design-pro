@@ -1,7 +1,26 @@
 import { ModalForm, ProFormDatePicker, ProFormInstance, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import React, { useRef } from 'react';
 import {message} from 'antd';
-import {addGupiaoConfig } from '@/services/ant-design-pro/api';
+import { addGupiaoConfig } from '@/services/ant-design-pro/api';
+
+export const opList = [
+  {
+    value: '>',
+    label: '百分比大于',
+  },
+  {
+    value: '<',
+    label: '百分比小于',
+  },
+  {
+    value: '>value',
+    label: '当前价格大于',
+  },
+  {
+    value: '<value',
+    label: '当前价格小于',
+  },
+];
 interface Props{
     visible: boolean;
     handleModalVisible: (value: boolean) => void;
@@ -53,17 +72,28 @@ export default function AddModel(props:Props) {
           placeholder='请输入股票代码'
           name="code"
       />
-      <ProFormText
-        rules={[
+      <ProFormSelect
+        options={[
           {
-            required: true,
-            message: '必填',
+            value: '>',
+            label: '百分比大于',
+          },
+          {
+            value: '<',
+            label: '百分比小于',
+          },
+          {
+            value: '>value',
+            label: '当前价格大于',
+          },
+          {
+            value: '<value',
+            label: '当前价格小于',
           },
         ]}
-        label="操作符号"
         width="md"
-        placeholder='请输入>,<,<value,>value'
         name="op"
+        label="操作符号"
       />
       <ProFormText
         rules={[

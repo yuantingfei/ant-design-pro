@@ -6,7 +6,7 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { listConfig,removeGupiaoConfig } from '@/services/ant-design-pro/api';
-import AddModelConfig from './AddModelConfig';
+import AddModelConfig, { opList } from './AddModelConfig';
 const handleRemove = async (value: API.GupiaoConfigListItem) => {
   const hide = message.loading('正在删除');
   if (!value) return true;
@@ -70,6 +70,14 @@ const UserList: React.FC = () => {
       title: '操作符号',
       dataIndex: 'op',
       search: false,
+      render: (_, record) => {
+        let opss = opList.filter(i => {
+          return i.value ===record.op
+        })[0]
+        return <>
+          {opss.label}
+        </>;
+      },
     },
     {
       title: '值',
