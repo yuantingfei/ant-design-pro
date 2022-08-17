@@ -129,11 +129,18 @@
         component: './GupiaoList',
       },
       {
-        name: '股票提醒配置',
+        name: '预警提醒配置',
         icon: 'table',
         path: '/gupiao/config',
         access: 'canAdmin',
         component: './GupiaoList/Config',
+      },
+      {
+        name: '定时提醒配置',
+        icon: 'table',
+        path: '/gupiao/dingshi',
+        access: 'canAdmin',
+        component: './GupiaoList/Dingshi',
       }
     ],
   },

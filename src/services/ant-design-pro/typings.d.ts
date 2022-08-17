@@ -181,9 +181,18 @@ declare namespace API {
     add_date?: string;
     userinfoId?: number;
     url?: string;
-    time?: number;
+    times?: number;
     timesUsed?: number;
     status?: number;
+  };
+  type GupiaoDingshiListItem = {
+    id?: number;
+    code?: string;
+    timeStr?: string;
+    mod_date?: string;
+    add_date?: string;
+    userinfoId?: number;
+    url?: string;
   };
 }
   

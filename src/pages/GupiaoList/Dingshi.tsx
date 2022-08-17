@@ -5,13 +5,13 @@ import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { listConfig,removeGupiaoConfig } from '@/services/ant-design-pro/api';
-import AddModelConfig, { opList } from './AddModelConfig';
-const handleRemove = async (value: API.GupiaoConfigListItem) => {
+import { listDingshi,deleteDingshi } from '@/services/ant-design-pro/api';
+import AddModelDingshi, { opList } from './AddModelDingshi';
+const handleRemove = async (value: API.GupiaoDingshiListItem) => {
   const hide = message.loading('正在删除');
   if (!value) return true;
   try {
-    const success = await removeGupiaoConfig({
+    const success = await deleteDingshi({
       id: value.id,
     });
     hide();
@@ -39,8 +39,8 @@ const UserList: React.FC = () => {
   const [ImportModalVisible, handleImportModalVisible] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.GupiaoConfigListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.GupiaoConfigListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.GupiaoDingshiListItem>();
+  const [selectedRowsState, setSelectedRows] = useState<API.GupiaoDingshiListItem[]>([]);
 
   /**
    * @en-US International configuration
@@ -48,7 +48,7 @@ const UserList: React.FC = () => {
    * */
   const intl = useIntl();
 
-  const columns: ProColumns<API.GupiaoConfigListItem>[] = [
+  const columns: ProColumns<API.GupiaoDingshiListItem>[] = [
     {
       title: 'ID',
       dataIndex: 'id',
@@ -67,33 +67,8 @@ const UserList: React.FC = () => {
       search: true
     },
     {
-      title: '操作符号',
-      dataIndex: 'op',
-      search: false,
-      render: (_, record) => {
-        let opss = opList.filter(i => {
-          return i.value ===record.op
-        })[0]
-        return <>
-          {opss.label}
-        </>;
-      },
-    },
-    {
-      title: '值',
-      dataIndex: 'value',
-      valueType: 'textarea',
-      search:false,
-    },
-    {
-      title: '提醒次数',
-      dataIndex: 'times',
-      valueType: 'textarea',
-      search:false,
-    },
-    {
-      title: '已经提醒次数',
-      dataIndex: 'timesUsed',
+      title: '提醒时间',
+      dataIndex: 'timeStr',
       valueType: 'textarea',
       search:false,
     },
@@ -119,7 +94,7 @@ const UserList: React.FC = () => {
       valueType: 'option',
       render: (_, record) => {
       return <>
-        {record.status === 1 && record.timesUsed < record.times &&
+        {
             <a key="subscribeAlert" onClick={() => {
             handleRemove(record)
             actionRef.current.reload();
@@ -131,8 +106,8 @@ const UserList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.GupiaoConfigListItem, API.PageParams>
-        headerTitle={'预警提醒配置列表'}
+      <ProTable<API.GupiaoDingshiListItem, API.PageParams>
+        headerTitle={'定时提醒配置列表'}
         actionRef={actionRef}
         rowKey="id"
         search={{
@@ -158,7 +133,7 @@ const UserList: React.FC = () => {
         >
         </Button>,
         ]}
-        request={listConfig}
+        request={listDingshi}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -191,12 +166,12 @@ const UserList: React.FC = () => {
           </Button> */}
         </FooterToolbar>
       )}
-      <AddModelConfig visible={createModalVisible} handleModalVisible={handleModalVisible} submitok={()=>{
+      <AddModelDingshi visible={createModalVisible} handleModalVisible={handleModalVisible} submitok={()=>{
         handleModalVisible(false);
         if (actionRef.current) {
           actionRef.current.reload();
         }
-      }}></AddModelConfig>
+      }}></AddModelDingshi>
       
     </PageContainer>
   );

@@ -396,6 +396,17 @@ export async function removeGupiao(options?: { [key: string]: any; }) {
     ...(options || {}),
   });
 }
+/** 删除Link POST /api/v1/gupiao/deleteDingshi */
+export async function deleteDingshi(options?: { [key: string]: any; }) {
+  return request('/api/v1/gupiao/deleteDingshi/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
 
 export async function removeGupiaoConfig(options?: { [key: string]: any; }) {
   return request('/api/v1/gupiao/deleteConfig/', {
@@ -404,6 +415,34 @@ export async function removeGupiaoConfig(options?: { [key: string]: any; }) {
       'Content-Type': 'application/json',
     },
     data: options,
+    ...(options || {}),
+  });
+}
+export async function addGupiaoDingshi(options?: { [key: string]: any; }) {
+  return request<API.GupiaoConfigListItem>('/api/v1/gupiao/addDingshi/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
+export async function listDingshi(
+  params: {
+    // query
+    /** 当前的页码 */
+    current?: number;
+    /** 页面的容量 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any; },
+) {
+  return request<API.GupiaoDingshiListItem>('/api/v1/gupiao/listDingshi/', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
     ...(options || {}),
   });
 }
