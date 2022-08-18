@@ -7,6 +7,7 @@ import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { listDingshi,deleteDingshi } from '@/services/ant-design-pro/api';
 import AddModelDingshi, { opList } from './AddModelDingshi';
+import EditModelDingshi from './EditModelDingshi';
 const handleRemove = async (value: API.GupiaoDingshiListItem) => {
   const hide = message.loading('正在删除');
   if (!value) return true;
@@ -94,11 +95,21 @@ const UserList: React.FC = () => {
       valueType: 'option',
       render: (_, record) => {
       return <>
-        {
-            <a key="subscribeAlert" onClick={() => {
+          <a key="subscribeAlert" onClick={() => {
             handleRemove(record)
             actionRef.current.reload();
-          }}>删除</a >}
+          }}>删除</a >
+        <Button
+          type='link'
+          style={{marginLeft:'10px'}}
+            key="config"
+            onClick={() => {
+              setCurrentRow(record);
+              handleUpdateModalVisible(true);
+            }}
+          >
+            编辑
+          </Button>
       </>
       },
     },
@@ -172,7 +183,12 @@ const UserList: React.FC = () => {
           actionRef.current.reload();
         }
       }}></AddModelDingshi>
-      
+      <EditModelDingshi editItem={currentRow} visible={updateModalVisible} handleModalVisible={handleUpdateModalVisible} submitok={() => {
+        handleUpdateModalVisible(false);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
+      }}></EditModelDingshi>
     </PageContainer>
   );
 };

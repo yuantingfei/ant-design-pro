@@ -107,7 +107,7 @@ export default function AddModel(props:Props) {
         placeholder='请输入值'
         name="value"
       />
-      <ProFormText
+      <ProFormTextArea
         rules={[
           {
             required: true,

@@ -84,7 +84,7 @@ export default function AddModelDingshi(props:Props) {
         placeholder='请输入时间，格式如：14:50,必须是10分钟整除'
         name="timeStr"
       />
-      <ProFormText
+      <ProFormTextArea
         rules={[
           {
             required: true,

@@ -446,3 +446,13 @@ export async function listDingshi(
     ...(options || {}),
   });
 }
+export async function editDingshi(options?: { [key: string]: any; }) {
+  return request<API.BillListItem>('/api/v1/gupiao/editDingshi/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
