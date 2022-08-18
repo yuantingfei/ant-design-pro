@@ -1,7 +1,7 @@
 import { ModalForm, ProFormDatePicker, ProFormInstance, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import React, { useRef,useEffect } from 'react';
 import {message} from 'antd';
-import {editUser } from '@/services/ant-design-pro/api';
+import { editUserMoney } from '@/services/ant-design-pro/api';
 interface Props{
     visible: boolean;
     editItem: API.BillListItem|undefined;
@@ -9,12 +9,12 @@ interface Props{
     submitok: () => void;
 }
 
-export default function EditUser(props:Props) {
+export default function EditUserMoney(props:Props) {
     const editformRef = useRef<ProFormInstance>();
     const handleEdit = async (fields) => {
       const hide = message.loading('正在编辑');
       try {
-        await editUser({ ...fields,id:props.editItem?.id });
+        await editUserMoney({ ...fields,id:props.editItem?.id });
         message.success('编辑成功');
         return true;
       } catch (error) {
@@ -33,7 +33,7 @@ export default function EditUser(props:Props) {
   }
   return (
     <ModalForm
-        title={'编辑用户信息'}
+        title={'编辑用户账户余额'}
         width="400px"
         formRef={editformRef}
         visible={props.visible}
@@ -67,15 +67,11 @@ export default function EditUser(props:Props) {
               message: '必填',
             },
           ]}
-          label="电话"
-          placeholder='请输入电话'
+          label="金额"
+          placeholder='请输入金额'
           width="md"
-          name="telphtone"
+          name="moneyCount"
         />
-        <ProFormTextArea
-        label="描述"
-        placeholder='请输入简短语言描述此用户'
-         width="md" name="description" />
       </ModalForm>
   );
 }

@@ -13,6 +13,7 @@ const Info = (props:Props) => {
         <p>用户名:{initialState.currentUser?.username}</p>
         <p>电话:{initialState.currentUser?.telphtone}</p>
         <p>描述:{initialState.currentUser?.description}</p>
+        <p>账户余额:{initialState.currentUser?.moneyCount}</p>
       </Modal>
     </>
   );

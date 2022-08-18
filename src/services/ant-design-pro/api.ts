@@ -84,6 +84,17 @@ export async function editUser(options?: { [key: string]: any }) {
     ...(options || {}),
   });
 }
+/** 编辑用户 POST /api/v1/editUserMoney/ */
+export async function editUserMoney(options?: { [key: string]: any }) {
+  return request<API.BillListItem>('/api/v1/editUserMoney/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
 /** 获取账单列表 GET /api/v1/bill */
 export async function billlist(
   params: {

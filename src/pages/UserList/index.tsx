@@ -10,6 +10,7 @@ import { sum } from 'lodash';
 import AddUser from './AddUser';
 import EditUser from './EditUser';
 import ImportFile from './ImportFile';
+import EditUserMoney from './EditUserMoney';
 const handleRemove = async (value: API.UserItem) => {
   const hide = message.loading('正在删除');
   if (!value) return true;
@@ -38,6 +39,7 @@ const TableList: React.FC = () => {
    * @en-US The pop-up window of the distribution update window
    * @zh-CN 分布更新窗口的弹窗
    * */
+  const [EditUserMoneyVisible, handleEditUserMoneyVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [ImportModalVisible, handleImportModalVisible] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
@@ -80,6 +82,12 @@ const TableList: React.FC = () => {
       search:false
     },
     {
+      title: '账户余额',
+      dataIndex: 'moneyCount',
+      valueType: 'textarea',
+      search:false
+    },
+    {
       title: '创建时间',
       dataIndex: 'created',
       valueType: 'textarea',
@@ -104,6 +112,15 @@ const TableList: React.FC = () => {
           }}
         >
           编辑
+        </a>,
+        <a
+          key="config"
+          onClick={() => {
+            setCurrentRow(record);
+            handleEditUserMoneyVisible(true);
+          }}
+        >
+          编辑账户余额
         </a>,
         // <a key="subscribeAlert" href="https://procomponents.ant.design/">
         //   查看文档
@@ -175,6 +192,12 @@ const TableList: React.FC = () => {
           actionRef.current.reload();
         }
       }}></EditUser>
+      <EditUserMoney editItem={currentRow} visible={EditUserMoneyVisible} handleModalVisible={handleEditUserMoneyVisible} submitok={() => {
+        handleEditUserMoneyVisible(false);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
+      }}></EditUserMoney>
       <ImportFile visible={ImportModalVisible} handleModalVisible={handleImportModalVisible} submitok={()=>{
         handleImportModalVisible(false);
         if (actionRef.current) {
