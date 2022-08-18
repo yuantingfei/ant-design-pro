@@ -125,21 +125,18 @@
         name: '股票动态',
         icon: 'table',
         path: '/gupiao/gupiaolist',
-        access: 'canAdmin',
         component: './GupiaoList',
       },
       {
         name: '预警提醒配置',
         icon: 'table',
         path: '/gupiao/config',
-        access: 'canAdmin',
         component: './GupiaoList/Config',
       },
       {
         name: '定时提醒配置',
         icon: 'table',
         path: '/gupiao/dingshi',
-        access: 'canAdmin',
         component: './GupiaoList/Dingshi',
       }
     ],
