@@ -7,6 +7,7 @@ import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { listConfig,removeGupiaoConfig } from '@/services/ant-design-pro/api';
 import AddModelConfig, { opList } from './AddModelConfig';
+import EditModelConfig from './EditModelConfig';
 const handleRemove = async (value: API.GupiaoConfigListItem) => {
   const hide = message.loading('正在删除');
   if (!value) return true;
@@ -24,7 +25,16 @@ const handleRemove = async (value: API.GupiaoConfigListItem) => {
     return false;
   }
 };
-
+export const statusList = [
+  {
+    value: 1,
+    label: '未提醒'
+  },
+  {
+    value: 0,
+    label: '已提醒'
+  }
+];
 const UserList: React.FC = () => {
   /**
    * @en-US Pop-up window of new window
@@ -69,7 +79,7 @@ const UserList: React.FC = () => {
     {
       title: '操作符号',
       dataIndex: 'op',
-      search: false,
+      // search: false,
       render: (_, record) => {
         let opss = opList.filter(i => {
           return i.value ===record.op
@@ -77,6 +87,20 @@ const UserList: React.FC = () => {
         return <>
           {opss.label}
         </>;
+      },
+      valueEnum: {
+        ">": {
+          text: '百分比大于',
+        },
+        '<': {
+          text: '百分比小于',
+        },
+        '<value': {
+          text: '当前价格小于',
+        },
+        '>value': {
+          text: '当前价格大于',
+        }
       },
     },
     {
@@ -114,16 +138,49 @@ const UserList: React.FC = () => {
       search:false,
     },
     {
+      title: '状态',
+      dataIndex: 'status',
+      valueType: 'select',
+      valueEnum: {
+        0: {
+          text: '已提醒',
+        },
+        1: {
+          text: '未提醒',
+        }
+      },
+      render: (_, record) => {
+        let opss = statusList.filter(i => {
+          return i.value === record.status;
+        })[0];
+        return <>
+          {opss.label}
+        </>;
+      },
+    },
+    {
       title:'操作',
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => {
       return <>
-        {record.status === 1 && record.timesUsed < record.times &&
+        {record.timesUsed < record.times &&
             <a key="subscribeAlert" onClick={() => {
             handleRemove(record)
             actionRef.current.reload();
           }}>删除</a >}
+        { record.timesUsed < record.times &&
+          <Button
+            type='link'
+            style={{ marginLeft: '10px' }}
+            key="config"
+            onClick={() => {
+              setCurrentRow(record);
+              handleUpdateModalVisible(true);
+            }}
+          >
+            编辑
+          </Button>}
       </>
       },
     },
@@ -197,6 +254,12 @@ const UserList: React.FC = () => {
           actionRef.current.reload();
         }
       }}></AddModelConfig>
+      <EditModelConfig editItem={currentRow} visible={updateModalVisible} handleModalVisible={handleUpdateModalVisible} submitok={() => {
+        handleUpdateModalVisible(false);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
+      }}></EditModelConfig>
       
     </PageContainer>
   );

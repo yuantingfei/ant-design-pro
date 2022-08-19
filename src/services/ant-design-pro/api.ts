@@ -458,7 +458,17 @@ export async function listDingshi(
   });
 }
 export async function editDingshi(options?: { [key: string]: any; }) {
-  return request<API.BillListItem>('/api/v1/gupiao/editDingshi/', {
+  return request('/api/v1/gupiao/editDingshi/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: options,
+    ...(options || {}),
+  });
+}
+export async function editConfig(options?: { [key: string]: any; }) {
+  return request('/api/v1/gupiao/editConfig/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
