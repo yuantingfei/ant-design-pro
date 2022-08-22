@@ -65,6 +65,7 @@ const UserList: React.FC = () => {
       title: '股票代码',
       dataIndex: 'code',
       valueType: 'textarea',
+      copyable: true,
       search: true
     },
     {
@@ -77,6 +78,7 @@ const UserList: React.FC = () => {
       title: '机器人URL',
       dataIndex: 'url',
       valueType: 'textarea',
+      copyable:true,
       search:false,
     },
     {

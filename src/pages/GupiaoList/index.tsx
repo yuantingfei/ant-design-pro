@@ -6,9 +6,8 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { listGupiao,removeGupiao } from '@/services/ant-design-pro/api';
-import { sum } from 'lodash';
 import AddModel from './AddModel';
-import ImportFile from './ImportFile';
+import { useInterval } from 'ahooks';
 const handleRemove = async (value: API.GupiaoListItem) => {
   const hide = message.loading('正在删除');
   if (!value) return true;
@@ -37,18 +36,12 @@ const UserList: React.FC = () => {
    * @en-US The pop-up window of the distribution update window
    * @zh-CN 分布更新窗口的弹窗
    * */
-  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [ImportModalVisible, handleImportModalVisible] = useState<boolean>(false);
-  const [showDetail, setShowDetail] = useState<boolean>(false);
+ 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.GupiaoListItem>();
   const [selectedRowsState, setSelectedRows] = useState<API.GupiaoListItem[]>([]);
-
-  /**
-   * @en-US International configuration
-   * @zh-CN 国际化配置
-   * */
-  const intl = useIntl();
+  useInterval(() => {
+    actionRef.current.reload();
+  }, 5000)
 
   const columns: ProColumns<API.GupiaoListItem>[] = [
     {

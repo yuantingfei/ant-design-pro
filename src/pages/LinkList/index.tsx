@@ -63,14 +63,16 @@ const UserList: React.FC = () => {
       },
     },
     {
-      title: 'Text',
+      title: '名称',
       dataIndex: 'text',
       valueType: 'textarea',
     },
     {
-      title: 'URL',
+      title: '链接地址',
       dataIndex: 'url',
       valueType: 'textarea',
+      ellipsis: true,
+      copyable:true,
       search:false,
     },
     {
