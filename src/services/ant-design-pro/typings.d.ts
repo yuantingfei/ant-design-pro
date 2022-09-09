@@ -194,5 +194,17 @@ declare namespace API {
     userinfoId?: number;
     url?: string;
   };
+  type SendLogListItem = {
+    id?: number;
+    code?: string;
+    timeStr?: string;
+    mod_date?: string;
+    add_date?: string;
+    type?: string;
+    userinfoId?: number;
+    text?: string;
+    configtext?: string;
+    url?: string;
+  };
 }
   

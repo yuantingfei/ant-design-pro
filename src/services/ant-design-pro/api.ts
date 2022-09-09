@@ -457,6 +457,24 @@ export async function listDingshi(
     ...(options || {}),
   });
 }
+export async function listSendLog(
+  params: {
+    // query
+    /** 当前的页码 */
+    current?: number;
+    /** 页面的容量 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any; },
+) {
+  return request<API.SendLogListItem>('/api/v1/gupiao/listSendLog/', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
 export async function editDingshi(options?: { [key: string]: any; }) {
   return request('/api/v1/gupiao/editDingshi/', {
     method: 'POST',

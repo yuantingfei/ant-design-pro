@@ -138,6 +138,12 @@
         icon: 'table',
         path: '/gupiao/dingshi',
         component: './GupiaoList/Dingshi',
+      },
+      {
+        name: '提醒日志',
+        icon: 'smile',
+        path: '/gupiao/sendlog',
+        component: './GupiaoList/SendLog',
       }
     ],
   },
