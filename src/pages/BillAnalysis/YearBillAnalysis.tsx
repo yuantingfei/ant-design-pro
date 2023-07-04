@@ -9,7 +9,7 @@ import { cloneDeep } from 'lodash';
 
 const YearBillAnalysis: React.FC = () => {
   const [dateValue, setdateValue] = useState(moment());
-  const [dateStr, setdateStr] = useState('2021');
+  const [dateStr, setdateStr] = useState(moment().format("YYYY"));
   const [moneyOutAll, setMoneyOutAll] = useState(0);
   const [moneyInAll, setMoneyInAll] = useState(0);
   const [dataBarOut, setdataBarOut] = useState([]);

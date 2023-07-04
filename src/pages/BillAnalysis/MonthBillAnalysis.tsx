@@ -9,7 +9,7 @@ import { cloneDeep } from 'lodash';
 
 const MonthBillAnalysis: React.FC = () => {
   const [dateValue, setdateValue] = useState(moment());
-  const [dateStr, setdateStr] = useState('2021-09');
+  const [dateStr, setdateStr] = useState(moment().format("YYYY-MM"));
   const [moneyOutAll, setMoneyOutAll] = useState(0);
   const [moneyInAll, setMoneyInAll] = useState(0);
   const [dataBarOut, setdataBarOut] = useState([]);
@@ -70,6 +70,11 @@ const MonthBillAnalysis: React.FC = () => {
     }
     return returnData
   }
+  useEffect(()=>{
+    setTimeout(() => {
+      // setdateStr(moment().format("YYYY-MM"))
+    }, 1000);
+  },[])
   useEffect(() => {
     getDataByUsedate({date:dateStr}).then(data=>{
       let inM = 0;

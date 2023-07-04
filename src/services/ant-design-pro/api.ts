@@ -147,12 +147,22 @@ export async function removeBill(options?: { [key: string]: any }) {
     ...(options || {}),
   });
 }
+/** 清空账单 POST /api/v1/deleteAllBill/ */
+export async function deleteAllBill() {
+  return request('/api/v1/deleteAllBill/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: {},
+  });
+}
 
 /** 获取账单列表 GET /api/v1/getDataByCategory */
 export async function getDataByCategory(
   params: {
-    date?:string;
-    type?:number
+    date?: string;
+    type?: number
   },
   options?: { [key: string]: any },
 ) {
@@ -167,8 +177,8 @@ export async function getDataByCategory(
 /** 获取当月账单趋势 GET /api/v1/getDataByUsedate */
 export async function getDataByUsedate(
   params: {
-    date?:string;
-    type?:number
+    date?: string;
+    type?: number
   },
   options?: { [key: string]: any },
 ) {

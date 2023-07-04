@@ -5,7 +5,7 @@ import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { billlist,removeBill } from '@/services/ant-design-pro/api';
+import { billlist,removeBill,deleteAllBill } from '@/services/ant-design-pro/api';
 import { sum } from 'lodash';
 import AddBillModel from './AddBillModel';
 import EditBillModel from './EditBillModel';
@@ -159,6 +159,16 @@ const UserList: React.FC = () => {
         >
           <PlusOutlined />导入
         </Button>,
+                  <Button
+                  type="primary"
+                  key="primary"
+                  onClick={() => {
+                    deleteAllBill()
+                    actionRef.current.reload();
+                  }}
+                >
+                  <PlusOutlined />清空所有数据
+                </Button>,
         ]}
         request={billlist}
         columns={columns}
